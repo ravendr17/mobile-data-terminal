@@ -1,7 +1,7 @@
-import createApp from 'express';
-const app = createApp();
+import express from 'express';
+const app = express();
 
-const port = parseInt(process.env.PORT);
+const port = parseInt(process.env.PORT || '3000', 10);
 
 app.get('/vehicles', (req, res) => {
   res.json({
