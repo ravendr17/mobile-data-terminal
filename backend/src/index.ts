@@ -1,7 +1,8 @@
 import express from 'express';
-const app = express();
+import pool from './db.js';
 
-const port = parseInt(process.env.PORT || '3000', 10);
+const app = express();
+const port = parseInt(process.env.PORT ?? '3000', 10);
 
 app.get('/vehicles', (req, res) => {
   res.json({
@@ -9,6 +10,6 @@ app.get('/vehicles', (req, res) => {
   });
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`Server is running on port ${port}`);
 })
