@@ -1,8 +1,17 @@
+using Backend.Data;
+using Microsoft.EntityFrameworkCore;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
-var dbConnStr = builder.Configuration.GetConnectionString("DefaultConnection");
-
 builder.Services.AddOpenApi();
+
+var dbConnectionStr = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(dbConnectionStr)
+           .UseSnakeCaseNamingConvention()
+);
 
 var app = builder.Build();
 
