@@ -21,4 +21,6 @@ public class License
     public string BloodType { get; set; } = string.Empty;
 
     public List<Vehicle> Vehicles { get; set; } = [];
+    public LicenseType Type { get; set; } = null!;
+    public LicenseStatus Status { get; set; } = null!;
 }
