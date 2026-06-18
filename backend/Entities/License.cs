@@ -19,5 +19,5 @@ public class License
     public int Weight { get; set; }
     public string BloodType { get; set; } = string.Empty;
 
-    public List<Vehicle> Vehicles = [];
+    public List<Vehicle> Vehicles { get; set; } = [];
 }
