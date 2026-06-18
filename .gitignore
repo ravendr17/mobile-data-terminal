@@ -1,11 +1,24 @@
 # Local Secrets & Config
+appsettings.Development.json
+appsettings.development.json
 .env
 .env.*
 *.local
 !.env.example
 
+# .NET
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+publish/
+
 # IDE / Editors
 .idea/
+.vs/
+*.sln.iml
 
 # Node / React / Vite
 node_modules/
