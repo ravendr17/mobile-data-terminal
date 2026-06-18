@@ -1,4 +1,4 @@
-namespace MobileDataTerminalAPI.Entities;
+namespace Backend.Entities;
 
 public class Account
 {
