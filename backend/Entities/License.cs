@@ -3,6 +3,7 @@ namespace MobileDataTerminalAPI.Entities;
 public class License
 {
     public int Id { get; set; }
+    public string Number { get; set; } = string.Empty;
     public int TypeId { get; set; }
     public int StatusId { get; set; }
     public DateOnly IssuanceDate { get; set; }
