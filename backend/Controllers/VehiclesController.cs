@@ -1,3 +1,4 @@
+using Backend.DTOs;
 using Backend.Services;
 using Backend.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -16,5 +17,19 @@ public class VehiclesController(VehicleService vehicleService): ControllerBase
         var result = await _vehicleService.GetByPlateOrMvFileNumAsync(number);
 
         return result.IsSuccess ? Ok(result.Data): result.ErrorResponse();
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> CreateAsync(VehicleCreateRequest request)
+    {
+        var result = await _vehicleService.CreateAsync(request);
+
+        if (!result.IsSuccess) return result.ErrorResponse();
+
+        return CreatedAtAction(
+            nameof(GetByPlateOrMvFileNumAsync),
+            new { number = request.PlateNumber},
+            new { id = result.Data}
+        );
     }
 }
