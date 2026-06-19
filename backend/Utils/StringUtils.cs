@@ -6,6 +6,6 @@ public static class StringUtils
     {
         List<string?> names = [firstName, middleName, lastName];
 
-        return string.Join(" ", names.Where(n => string.IsNullOrWhiteSpace(n)));
+        return string.Join(" ", names.Where(n => !string.IsNullOrWhiteSpace(n)));
     }
 }
