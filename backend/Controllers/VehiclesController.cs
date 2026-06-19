@@ -1,0 +1,20 @@
+using Backend.Services;
+using Backend.Utils;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Backend.Controllers;
+
+[ApiController]
+[Route("api/vehicles")]
+public class VehiclesController(VehicleService vehicleService): ControllerBase
+{
+    private readonly VehicleService _vehicleService = vehicleService;
+
+    [HttpGet("{number}")]
+    public async Task<ActionResult> GetByPlateOrMvFileNumAsync(string number)
+    {
+        var result = await _vehicleService.GetByPlateOrMvFileNumAsync(number);
+
+        return result.IsSuccess ? Ok(result.Data): result.ErrorResponse();
+    }
+}
