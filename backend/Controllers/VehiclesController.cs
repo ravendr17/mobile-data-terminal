@@ -32,4 +32,12 @@ public class VehiclesController(VehicleService vehicleService): ControllerBase
             new { id = result.Data}
         );
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteAsync(int id)
+    {
+        var result = await _vehicleService.DeleteAsync(id);
+        
+        return result.IsSuccess ? NoContent(): result.ErrorResponse();
+    }
 }

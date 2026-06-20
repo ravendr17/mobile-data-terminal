@@ -102,4 +102,15 @@ public class VehicleService(AppDbContext context)
 
         return Result<int>.Success(vehicle.Id);
     }
+
+    public async Task<Result> DeleteAsync(int id)
+    {
+        int rowsAffected = await _context.Vehicles
+            .Where(v => v.Id == id)
+            .ExecuteDeleteAsync();
+
+        if (rowsAffected > 0) return Result.Success();
+
+        return Result.NotFound($"Vehicle ID {id} not found.");
+    }
 }
