@@ -14,6 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
            .UseSnakeCaseNamingConvention()
 );
 
+builder.Services.AddScoped<LicenseService>();
 builder.Services.AddScoped<VehicleService>();
 
 builder.Services.AddControllers();
