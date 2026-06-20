@@ -20,6 +20,7 @@ public class VehiclesController(VehicleService vehicleService): ControllerBase
     }
 
     [HttpPost]
+    [ActionName(nameof(GetByPlateOrMvFileNumAsync))]
     public async Task<ActionResult> CreateAsync(VehicleCreateRequest request)
     {
         var result = await _vehicleService.CreateAsync(request);
