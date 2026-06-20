@@ -34,7 +34,7 @@ public class VehiclesController(VehicleService vehicleService): ControllerBase
         );
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteAsync(int id)
     {
         var result = await _vehicleService.DeleteAsync(id);

@@ -34,7 +34,7 @@ public class LicensesController(LicenseService licenseService): ControllerBase
         return result.IsSuccess ? Ok(result.Data) : result.ErrorResponse();
     }
 
-    [HttpDelete("{id}")]
+    [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteAsync(int id)
     {
         var result = await _licenseService.DeleteAsync(id);
