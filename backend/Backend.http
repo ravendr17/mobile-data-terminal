@@ -1,1 +1,22 @@
-@Backend_HostAddress = http://localhost:5133
+@Backend_HostAddress = https://localhost:7189
+
+### CREATE Vehicle
+POST {{Backend_HostAddress}}/api/vehicles/
+Content-Type: application/json
+
+{
+  "plateNumber": "ABC 1234",
+  "mvFileNumber": "XYZ6767",
+  "vin": "987654321",
+  "registerIssuanceDate": "2026-02-01",
+  "validity": 3,
+  "make": "Toyota",
+  "model": "Innova",
+  "year": "2026",
+  "color": "Silver",
+  "licenseNumber": "LN-12-3456"
+}
+
+### DELETE Vehicle
+@Id = 1
+DELETE {{Backend_HostAddress}}/api/vehicles/{{Id}}
