@@ -6,11 +6,13 @@ public static class ResultExtensions
 {
     public static ActionResult ErrorResponse<T>(this Result<T> result)
     {
+        var body = new { message = result.ErrorMessage};
+
         return result.ErrorType switch
         {
-            ErrorType.NotFound => new NotFoundObjectResult(result.ErrorMessage),
-            ErrorType.Conflict => new ConflictObjectResult(result.ErrorMessage),
-            _ => new BadRequestObjectResult(result.ErrorMessage)
+            ErrorType.NotFound => new NotFoundObjectResult(body),
+            ErrorType.Conflict => new ConflictObjectResult(body),
+            _ => new BadRequestObjectResult(body)
         };
     }
 }
