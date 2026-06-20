@@ -45,5 +45,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .WithMany()
             .HasForeignKey(l => l.StatusId)
             .HasConstraintName("fk_licenses_license_statuses");
+        
+        modelBuilder.Entity<LicenseType>().HasData(
+            new LicenseType { Id = 1, Name = "Non-Professional" },
+            new LicenseType { Id = 2, Name = "Professional" },
+            new LicenseType { Id = 3, Name = "Student Permit" }
+        );
+
+        modelBuilder.Entity<LicenseStatus>().HasData(
+            new LicenseStatus { Id = 1, Name = "Active" },
+            new LicenseStatus { Id = 2, Name = "Revoked" },
+            new LicenseStatus { Id = 3, Name = "Expired" }
+        );
     }
 }
