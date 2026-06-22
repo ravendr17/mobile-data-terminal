@@ -57,5 +57,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             new LicenseStatus { Id = 2, Name = "Revoked" },
             new LicenseStatus { Id = 3, Name = "Expired" }
         );
+
+        modelBuilder.Entity<AccountRole>().HasData(
+            new AccountRole {Id = 1, Name = "Civilian"},
+            new AccountRole {Id = 2, Name = "Officer"},
+            new AccountRole {Id = 3, Name = "Supervisor"},
+            new AccountRole {Id = 4, Name = "Admin"}
+        );
     }
 }
