@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Services;
 
-public class AccountService(AppDbContext context)
+public class AccountService(AppDbContext context, PasswordHasher<Account> hasher)
 {
-    private AppDbContext _context = context;
-    private PasswordHasher<Account> _hasher = new PasswordHasher<Account>();
+    private readonly AppDbContext _context = context;
+    private readonly PasswordHasher<Account> _hasher = hasher;
 
     public async Task<Result<int>> CreateAsync(AccountCreateRequest req)
     {
@@ -70,5 +70,16 @@ public class AccountService(AppDbContext context)
         await _context.SaveChangesAsync();
 
         return Result<int>.Success(account.Id);
+    }
+
+    public async Task<Result> DeleteAsync(int id)
+    {
+        int rows = await _context.Accounts
+            .Where(a => a.Id == id)
+            .ExecuteDeleteAsync();
+
+        if (rows > 0) return Result.Success();
+
+        return Result.NotFound($"Account ID {id} not found.");
     }
 }
