@@ -2,6 +2,7 @@ using Backend.Data;
 using Backend.DTOs;
 using Backend.Entities;
 using Backend.Utils;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -70,6 +71,27 @@ public class AccountService(AppDbContext context, PasswordHasher<Account> hasher
         await _context.SaveChangesAsync();
 
         return Result<int>.Success(account.Id);
+    }
+
+    public async Task<Result<AccountGetResponse>> GetByIdAsync(int id)
+    {
+        var account = await _context.Accounts
+            .Where(a => a.Id == id)
+            .Select(a => new AccountGetResponse(
+                a.Id,
+                a.RoleId,
+                a.Role.Name,
+                a.LicenseId,
+                a.License!.Number
+            ))
+            .FirstOrDefaultAsync();
+
+        if (account == null)
+        {
+            return Result<AccountGetResponse>.NotFound($"Account ID {id} not found");
+        }
+
+        return Result<AccountGetResponse>.Success(account);
     }
 
     public async Task<Result> DeleteAsync(int id)

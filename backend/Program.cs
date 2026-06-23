@@ -21,6 +21,7 @@ builder.Services.AddScoped<PasswordHasher<Account>>();
 
 builder.Services.AddScoped<LicenseService>();
 builder.Services.AddScoped<VehicleService>();
+builder.Services.AddScoped<AccountService>();
 
 builder.Services.AddControllers();
 
