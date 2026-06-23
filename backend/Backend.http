@@ -55,5 +55,24 @@ Content-Type: application/json
 GET {{Backend_HostAddress}}/api/vehicles/{{plateOrMvFileNum}}
 
 ### DELETE Vehicle
-@vehicleId = 2
+@vehicleId = 99
 DELETE {{Backend_HostAddress}}/api/vehicles/{{vehicleId}}
+
+
+### CREATE Account
+POST {{Backend_HostAddress}}/api/accounts/
+Content-Type: application/json
+
+{
+  "email": "sample@gmail.com",
+  "password": "passwordpassword",
+  "roleId": 1,
+  "licenseNumber": "LN-12-3456"
+}
+
+### GET Account
+@accountId = 5
+GET {{Backend_HostAddress}}/api/accounts/{{accountId}}
+
+### DELETE Account
+DELETE {{Backend_HostAddress}}/api/accounts/{{accountId}}
