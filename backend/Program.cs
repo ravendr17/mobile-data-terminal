@@ -1,5 +1,7 @@
 using Backend.Data;
+using Backend.Entities;
 using Backend.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +16,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(dbConnectionStr)
            .UseSnakeCaseNamingConvention()
 );
+
+builder.Services.AddScoped<PasswordHasher<Account>>();
 
 builder.Services.AddScoped<LicenseService>();
 builder.Services.AddScoped<VehicleService>();
