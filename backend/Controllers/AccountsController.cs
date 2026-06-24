@@ -7,7 +7,7 @@ namespace Backend.Controllers;
 
 [ApiController]
 [Route("api/accounts")]
-public class AccountsControllers(AccountService accountService): ControllerBase
+public class AccountsController(AccountService accountService): ControllerBase
 {
     private AccountService _accountService = accountService;
 
