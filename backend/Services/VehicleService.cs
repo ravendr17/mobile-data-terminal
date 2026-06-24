@@ -57,8 +57,7 @@ public class VehicleService(AppDbContext context)
         }
 
         bool plateAlreadyExists = await vehicles
-            .Where(v => v.PlateNumber == req.PlateNumber)
-            .AnyAsync();
+            .AnyAsync(v => v.PlateNumber == req.PlateNumber);
         
         if (plateAlreadyExists)
         {
@@ -66,8 +65,7 @@ public class VehicleService(AppDbContext context)
         }
 
         bool mvFileAlreadyExists = await vehicles
-            .Where(v => v.MvFileNumber == req.MvFileNumber)
-            .AnyAsync();
+            .AnyAsync(v => v.MvFileNumber == req.MvFileNumber);
 
         if (mvFileAlreadyExists)
         {
@@ -75,8 +73,7 @@ public class VehicleService(AppDbContext context)
         }
 
         bool vinAlreadyExists = await vehicles
-            .Where(v => v.Vin == req.Vin)
-            .AnyAsync();
+            .AnyAsync(v => v.Vin == req.Vin);
 
         if (vinAlreadyExists)
         {

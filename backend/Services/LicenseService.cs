@@ -15,8 +15,7 @@ public class LicenseService(AppDbContext context)
         var licenses = _context.Licenses;
 
         bool numberAlreadyExists = await licenses
-            .Where(l => l.Number == req.Number)
-            .AnyAsync();
+            .AnyAsync(l => l.Number == req.Number);
 
         if (numberAlreadyExists)
         {
@@ -27,17 +26,15 @@ public class LicenseService(AppDbContext context)
         int licenseStatusId = req.StatusId!.Value;
 
         bool typeExists = await _context.LicenseTypes
-            .Where(lt => lt.Id == licenseTypeId)
-            .AnyAsync();
+            .AnyAsync(lt => lt.Id == licenseTypeId);
         
         if (!typeExists)
         {
             return Result<int>.BadRequest($"License type {licenseTypeId} not found.");
         }
 
-        bool statusExists = await _context.LicenseStatuses
-            .Where(ls => ls.Id == licenseStatusId)
-            .AnyAsync();
+        bool statusExists = await _context.LicenseStatuses 
+            .AnyAsync(ls => ls.Id == licenseStatusId);
 
         if (!statusExists)
         {
