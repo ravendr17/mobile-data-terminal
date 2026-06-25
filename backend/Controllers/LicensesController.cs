@@ -9,7 +9,7 @@ namespace Backend.Controllers;
 [Route("api/licenses")]
 public class LicensesController(LicenseService licenseService): ControllerBase
 {
-    private LicenseService _licenseService = licenseService;
+    private readonly LicenseService _licenseService = licenseService;
 
     [HttpPost]
     public async Task<ActionResult> CreateAsync(LicenseCreateRequest request)
@@ -19,14 +19,13 @@ public class LicensesController(LicenseService licenseService): ControllerBase
         if (!result.IsSuccess) return result.ErrorResponse();
 
         return CreatedAtAction(
-            nameof(GetByNumberAsync),
+            "GetByNumber",
             new { number = request.Number},
             new { id = result.Data }
         );
     }
 
     [HttpGet("{number}")]
-    [ActionName(nameof(GetByNumberAsync))]
     public async Task<ActionResult> GetByNumberAsync(string number)
     {
         var result = await _licenseService.GetByNumberAsync(number);

@@ -20,7 +20,6 @@ public class VehiclesController(VehicleService vehicleService): ControllerBase
     }
 
     [HttpPost]
-    [ActionName(nameof(GetByPlateOrMvFileNumAsync))]
     public async Task<ActionResult> CreateAsync(VehicleCreateRequest request)
     {
         var result = await _vehicleService.CreateAsync(request);
@@ -28,7 +27,7 @@ public class VehiclesController(VehicleService vehicleService): ControllerBase
         if (!result.IsSuccess) return result.ErrorResponse();
 
         return CreatedAtAction(
-            nameof(GetByPlateOrMvFileNumAsync),
+            "GetByPlateOrMvFileNum",
             new { number = request.PlateNumber},
             new { id = result.Data}
         );

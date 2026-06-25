@@ -8,7 +8,7 @@ namespace Backend.Services;
 
 public class LicenseService(AppDbContext context)
 {
-    private AppDbContext _context = context;
+    private readonly AppDbContext _context = context;
 
     public async Task<Result<int>> CreateAsync(LicenseCreateRequest req)
     {
