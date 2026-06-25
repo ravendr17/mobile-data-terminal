@@ -76,3 +76,12 @@ GET {{Backend_HostAddress}}/api/accounts/{{accountId}}
 
 ### DELETE Account
 DELETE {{Backend_HostAddress}}/api/accounts/{{accountId}}
+
+### LOGIN Account
+POST {{Backend_HostAddress}}/api/accounts/login
+Content-Type: application/json
+
+{
+  "email": "sample@gmail.com",
+  "password": "passwordpassword"
+}
