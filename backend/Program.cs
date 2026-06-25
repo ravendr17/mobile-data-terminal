@@ -1,3 +1,4 @@
+using Backend.Authentication;
 using Backend.Data;
 using Backend.Entities;
 using Backend.Services;
@@ -17,7 +18,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
            .UseSnakeCaseNamingConvention()
 );
 
-builder.Services.AddScoped<PasswordHasher<Account>>();
+builder.Services.AddSingleton<PasswordHasher<Account>>();
+builder.Services.AddSingleton<TokenProvider>();
 
 builder.Services.AddScoped<LicenseService>();
 builder.Services.AddScoped<VehicleService>();
