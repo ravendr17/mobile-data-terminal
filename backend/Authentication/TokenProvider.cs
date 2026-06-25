@@ -11,7 +11,7 @@ public class TokenProvider(IConfiguration configuration)
 {
     public string Create(Account account)
     {
-        string secretKey = configuration["Jwt:secret"]!;
+        string secretKey = configuration["Jwt:Secret"]!;
         
         var securityKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(secretKey)

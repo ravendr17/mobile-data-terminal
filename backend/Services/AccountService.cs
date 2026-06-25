@@ -113,6 +113,7 @@ public class AccountService(
     public async Task<Result<string>> LoginAsync(AccountLoginRequest req)
     {
         var account = await _context.Accounts
+            .Include(a => a.Role)
             .FirstOrDefaultAsync(a => a.Email == req.Email);
 
         if (account == null)
