@@ -1,3 +1,4 @@
+using Backend.Authentication;
 using Backend.Data;
 using Backend.DTOs;
 using Backend.Entities;
@@ -8,10 +9,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Services;
 
-public class AccountService(AppDbContext context, PasswordHasher<Account> hasher)
+public class AccountService(
+    AppDbContext context,
+    PasswordHasher<Account> hasher,
+    TokenProvider tokenProvider)
 {
     private readonly AppDbContext _context = context;
     private readonly PasswordHasher<Account> _hasher = hasher;
+    private readonly TokenProvider _tokenProvider = tokenProvider;
 
     public async Task<Result<int>> CreateAsync(AccountCreateRequest req)
     {
@@ -103,5 +108,29 @@ public class AccountService(AppDbContext context, PasswordHasher<Account> hasher
         if (rows > 0) return Result.Success();
 
         return Result.NotFound($"Account ID {id} not found.");
+    }
+
+    public async Task<Result<string>> LoginAsync(AccountLoginRequest req)
+    {
+        var account = await _context.Accounts
+            .FirstOrDefaultAsync(a => a.Email == req.Email);
+
+        if (account == null)
+        {
+            return Result<string>.NotFound("Invalid email or password.");
+        }
+
+        var result = _hasher.VerifyHashedPassword(
+            account, account.Password, req.Password
+        );
+
+        if (result == PasswordVerificationResult.Failed)
+        {
+            return Result<string>.Unauthorized("Invalid email or password.");
+        }
+
+        string token = _tokenProvider.Create(account);
+
+        return Result<string>.Success(token);
     }
 }
