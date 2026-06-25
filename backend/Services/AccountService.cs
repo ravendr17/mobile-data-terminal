@@ -117,7 +117,7 @@ public class AccountService(
 
         if (account == null)
         {
-            return Result<string>.NotFound("Invalid email or password.");
+            return Result<string>.Unauthorized("Invalid email or password.");
         }
 
         var result = _hasher.VerifyHashedPassword(
