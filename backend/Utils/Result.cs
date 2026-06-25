@@ -32,6 +32,11 @@ public class Result
     {
         return new Result(false, errorMessage, ErrorType.BadRequest);
     }
+
+    public static Result Unauthorized(string errorMessage)
+    {
+        return new Result(false, errorMessage, ErrorType.Unauthorized);
+    }
 }
 
 public class Result<T>: Result
@@ -62,5 +67,10 @@ public class Result<T>: Result
     public static new Result<T> BadRequest(string errorMessage)
     {
         return new Result<T>(false, default, errorMessage, ErrorType.BadRequest);
-    } 
+    }
+
+    public static new Result<T> Unauthorized(string errorMessage)
+    {
+        return new Result<T>(false, default, errorMessage, ErrorType.Unauthorized);
+    }
 }

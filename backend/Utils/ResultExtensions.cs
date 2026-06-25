@@ -12,6 +12,7 @@ public static class ResultExtensions
         {
             ErrorType.NotFound => new NotFoundObjectResult(body),
             ErrorType.Conflict => new ConflictObjectResult(body),
+            ErrorType.Unauthorized => new UnauthorizedObjectResult(body),
             _ => new BadRequestObjectResult(body)
         };
     }

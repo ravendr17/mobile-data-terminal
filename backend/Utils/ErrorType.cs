@@ -5,5 +5,6 @@ public enum ErrorType
     None,
     NotFound,
     Conflict,
-    BadRequest
+    BadRequest,
+    Unauthorized
 }
