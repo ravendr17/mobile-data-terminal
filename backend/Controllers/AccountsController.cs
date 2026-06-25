@@ -9,7 +9,7 @@ namespace Backend.Controllers;
 [Route("api/accounts")]
 public class AccountsController(AccountService accountService): ControllerBase
 {
-    private AccountService _accountService = accountService;
+    private readonly AccountService _accountService = accountService;
 
     [HttpPost]
     public async Task<ActionResult> CreateAsync(AccountCreateRequest request)
@@ -19,14 +19,13 @@ public class AccountsController(AccountService accountService): ControllerBase
         if (!result.IsSuccess) return result.ErrorResponse();
 
         return CreatedAtAction(
-            nameof(GetByIdAsync),
+            "GetById",
             new { id = result.Data},
             new { id = result.Data }
         );
     }
 
     [HttpGet("{id:int}")]
-    [ActionName(nameof(GetByIdAsync))]
     public async Task<ActionResult> GetByIdAsync(int id)
     {
         var result = await _accountService.GetByIdAsync(id);
@@ -40,5 +39,15 @@ public class AccountsController(AccountService accountService): ControllerBase
         var result = await _accountService.DeleteAsync(id);
 
         return result.IsSuccess ? NoContent() : result.ErrorResponse();
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult> LoginAsync(AccountLoginRequest request)
+    {
+        var result = await _accountService.LoginAsync(request);
+
+        if (!result.IsSuccess) return result.ErrorResponse();
+
+        return Ok(result.Data);
     }
 }
