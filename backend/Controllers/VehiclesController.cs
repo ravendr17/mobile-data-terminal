@@ -1,6 +1,7 @@
 using Backend.DTOs;
 using Backend.Services;
 using Backend.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
@@ -20,6 +21,7 @@ public class VehiclesController(VehicleService vehicleService): ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> CreateAsync(VehicleCreateRequest request)
     {
         var result = await _vehicleService.CreateAsync(request);
@@ -34,6 +36,7 @@ public class VehiclesController(VehicleService vehicleService): ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> DeleteAsync(int id)
     {
         var result = await _vehicleService.DeleteAsync(id);

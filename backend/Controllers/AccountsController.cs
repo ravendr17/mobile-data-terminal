@@ -1,6 +1,7 @@
 using Backend.DTOs;
 using Backend.Services;
 using Backend.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
@@ -26,6 +27,7 @@ public class AccountsController(AccountService accountService): ControllerBase
     }
 
     [HttpGet("{id:int}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> GetByIdAsync(int id)
     {
         var result = await _accountService.GetByIdAsync(id);
@@ -34,6 +36,7 @@ public class AccountsController(AccountService accountService): ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> DeleteAsync(int id)
     {
         var result = await _accountService.DeleteAsync(id);

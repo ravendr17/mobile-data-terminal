@@ -1,6 +1,7 @@
 using Backend.DTOs;
 using Backend.Services;
 using Backend.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
@@ -12,6 +13,7 @@ public class LicensesController(LicenseService licenseService): ControllerBase
     private readonly LicenseService _licenseService = licenseService;
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> CreateAsync(LicenseCreateRequest request)
     {
         var result = await _licenseService.CreateAsync(request);
@@ -34,6 +36,7 @@ public class LicensesController(LicenseService licenseService): ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult> DeleteAsync(int id)
     {
         var result = await _licenseService.DeleteAsync(id);
