@@ -1,9 +1,10 @@
 @Backend_HostAddress = https://localhost:7189
 
 
-### CREATE License
+### CREATE License (Admin)
 POST {{Backend_HostAddress}}/api/licenses/
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "number": "LN-12-3456",
@@ -27,15 +28,18 @@ Content-Type: application/json
 ### GET License
 @licenseNumber = LN-12-3456
 GET {{Backend_HostAddress}}/api/licenses/{{licenseNumber}}
+Authorization: Bearer {{token}}
 
-### DELETE License
+### DELETE License (Admin)
 @licenseId = 2
 DELETE {{Backend_HostAddress}}/api/licenses/{{licenseId}}
+Authorization: Bearer {{token}}
 
 
-### CREATE Vehicle
+### CREATE Vehicle (Admin)
 POST {{Backend_HostAddress}}/api/vehicles/
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
   "plateNumber": "ABC 1234",
@@ -54,9 +58,10 @@ Content-Type: application/json
 @plateOrMvFileNum = ABC 1234
 GET {{Backend_HostAddress}}/api/vehicles/{{plateOrMvFileNum}}
 
-### DELETE Vehicle
+### DELETE Vehicle (Admin)
 @vehicleId = 99
 DELETE {{Backend_HostAddress}}/api/vehicles/{{vehicleId}}
+Authorization: Bearer {{token}}
 
 
 ### CREATE Account
@@ -64,24 +69,29 @@ POST {{Backend_HostAddress}}/api/accounts/
 Content-Type: application/json
 
 {
-  "email": "sample@gmail.com",
-  "password": "passwordpassword",
-  "roleId": 1,
-  "licenseNumber": "LN-12-3456"
+  "email": "officer@gmail.com",
+  "password": "officerpassword123",
+  "roleId": 2,
+  "licenseNumber": null
 }
 
-### GET Account
-@accountId = 5
+### GET Account (Admin for now)
+@accountId = 6
 GET {{Backend_HostAddress}}/api/accounts/{{accountId}}
+Authorization: Bearer {{token}}
 
-### DELETE Account
+### DELETE Account (Admin)
 DELETE {{Backend_HostAddress}}/api/accounts/{{accountId}}
+Authorization: Bearer {{token}}
 
 ### LOGIN Account
+# @name login
 POST {{Backend_HostAddress}}/api/accounts/login
 Content-Type: application/json
 
 {
-  "email": "sample@gmail.com",
-  "password": "passwordpassword"
+  "email": "officer@gmail.com",
+  "password": "officerpassword123"
 }
+
+> {% client.global.set("token", response.body) %}
