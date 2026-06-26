@@ -3,7 +3,6 @@ using Backend.Data;
 using Backend.DTOs;
 using Backend.Entities;
 using Backend.Utils;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
