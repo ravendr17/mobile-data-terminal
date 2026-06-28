@@ -69,9 +69,9 @@ POST {{Backend_HostAddress}}/api/accounts/
 Content-Type: application/json
 
 {
-  "email": "officer@gmail.com",
-  "password": "officerpassword123",
-  "roleId": 2,
+  "email": "admin@gmail.com",
+  "password": "adminpassword123",
+  "roleId": 4,
   "licenseNumber": null
 }
 
@@ -90,8 +90,8 @@ POST {{Backend_HostAddress}}/api/accounts/login
 Content-Type: application/json
 
 {
-  "email": "officer@gmail.com",
-  "password": "officerpassword123"
+  "email": "admin@gmail.com",
+  "password": "adminpassword123"
 }
 
 > {% client.global.set("token", response.body) %}
