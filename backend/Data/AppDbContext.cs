@@ -72,8 +72,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         
         modelBuilder.Entity<Account>(entity =>
         {
+            entity.Property(e => e.Username).HasMaxLength(30);
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.Password).HasMaxLength(255);
+
+            entity.HasIndex(e => e.Username)
+                .IsUnique()
+                .HasDatabaseName("uq_accounts_username");
 
             entity.HasIndex(e => e.Email)
                 .IsUnique()
