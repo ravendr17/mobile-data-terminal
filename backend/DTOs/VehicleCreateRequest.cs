@@ -4,7 +4,7 @@ namespace Backend.DTOs;
 
 public record VehicleCreateRequest(
     [Required(ErrorMessage = "Plate number is required.")] 
-    [MaxLength(30, ErrorMessage = "Plate number cannot exceed 30 characters.")] 
+    [MaxLength(30, ErrorMessage = "Plate number cannot exceed 10 characters.")]
     string PlateNumber,
     
     [MaxLength(30, ErrorMessage = "MV File number cannot exceed 30 characters.")] 
