@@ -6,6 +6,8 @@ public record AccountCreateRequest(
     [Required(ErrorMessage = "Username is required.")]
     [MinLength(8, ErrorMessage = "Username must be at least 8 characters long.")]
     [MaxLength(30, ErrorMessage = "Username cannot exceed 30 characters.")]
+    [RegularExpression(@"^[a-zA-Z0-9_-]+$",
+        ErrorMessage = "Username must only contain letters, numbers, underscores, and dashes.")]
     string Username,
     
     [Required(ErrorMessage = "Email is required.")] 
