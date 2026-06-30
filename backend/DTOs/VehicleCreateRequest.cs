@@ -4,14 +4,20 @@ namespace Backend.DTOs;
 
 public record VehicleCreateRequest(
     [Required(ErrorMessage = "Plate number is required.")] 
-    [MaxLength(30, ErrorMessage = "Plate number cannot exceed 10 characters.")]
+    [MaxLength(10, ErrorMessage = "Plate number cannot exceed 10 characters.")]
+    [RegularExpression(@"^[A-Z0-9 -]+$",
+        ErrorMessage = "Plate number must only contain capital letters, numbers, spaces, or dashes.")]
     string PlateNumber,
     
-    [MaxLength(30, ErrorMessage = "MV File number cannot exceed 30 characters.")] 
+    [MaxLength(20, ErrorMessage = "MV File number cannot exceed 20 characters.")] 
+    [RegularExpression(@"^[A-Z0-9 -]+$",
+        ErrorMessage = "MV File number must only contain capital letters, numbers, spaces, or dashes.")]
     string? MvFileNumber,
     
     [Required(ErrorMessage = "VIN is required.")] 
-    [MaxLength(30, ErrorMessage = "VIN cannot exceed 30 characters.")] 
+    [MaxLength(20, ErrorMessage = "VIN cannot exceed 20 characters.")] 
+    [RegularExpression(@"^[A-Z0-9]+$",
+        ErrorMessage = "VIN must only contain capital letters and numbers.")]
     string Vin,
     
     [Required(ErrorMessage = "Register issuance date is required.")] 
