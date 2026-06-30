@@ -17,7 +17,7 @@ public record VehicleCreateRequest(
     [Required(ErrorMessage = "VIN is required.")] 
     [MaxLength(20, ErrorMessage = "VIN cannot exceed 20 characters.")] 
     [RegularExpression(@"^[A-Z0-9]+$",
-        ErrorMessage = "VIN must only contain capital letters and numbers.")]
+        ErrorMessage = "VIN must only contain capital letters or numbers.")]
     string Vin,
     
     [Required(ErrorMessage = "Register issuance date is required.")] 
@@ -28,11 +28,15 @@ public record VehicleCreateRequest(
     int? Validity,
     
     [Required(ErrorMessage = "Make is required.")] 
-    [MaxLength(30, ErrorMessage = "Make cannot exceed 30 characters.")] 
+    [MaxLength(30, ErrorMessage = "Make cannot exceed 30 characters.")]
+    [RegularExpression(@"^[a-zA-Z0-9 .'-]+$",
+        ErrorMessage = "Make must only contain letters, numbers, spaces, dots, apostrophes or dashes.")]
     string Make,
     
     [Required(ErrorMessage = "Model is required.")] 
-    [MaxLength(30, ErrorMessage = "Model cannot exceed 30 characters.")] 
+    [MaxLength(30, ErrorMessage = "Model cannot exceed 30 characters.")]
+    [RegularExpression(@"^[a-zA-Z0-9 .'-]+$",
+        ErrorMessage = "Model must only contain letters, numbers, spaces, dots, apostrophes or dashes.")]
     string Model,
     
     [Required(ErrorMessage = "Year is required.")] 
@@ -41,9 +45,13 @@ public record VehicleCreateRequest(
     
     [Required(ErrorMessage = "Color is required.")] 
     [MaxLength(30, ErrorMessage = "Color cannot exceed 30 characters.")]
+    [RegularExpression(@"^[a-zA-Z ]+$",
+        ErrorMessage = "Color must only contain letters or spaces.")]
     string Color,
     
     [Required(ErrorMessage = "License number is required.")] 
     [MaxLength(30, ErrorMessage = "License number cannot exceed 30 characters.")]
+    [RegularExpression(@"^[A-Z0-9-]+$",
+        ErrorMessage = "License number must only contain numbers, capital letters, or dashes.")]
     string LicenseNumber
 );

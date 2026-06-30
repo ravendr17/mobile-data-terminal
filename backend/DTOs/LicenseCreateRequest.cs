@@ -6,7 +6,7 @@ public record LicenseCreateRequest(
     [Required(ErrorMessage = "License number is required.")] 
     [MaxLength(30, ErrorMessage = "License number cannot exceed 30 characters.")]
     [RegularExpression(@"^[A-Z0-9-]+$",
-        ErrorMessage = "License number must only contain numbers, capital letters, and dashes.")]
+        ErrorMessage = "License number must only contain numbers, capital letters, or dashes.")]
     string Number,
     
     [Required(ErrorMessage = "License type ID is required.")] 
@@ -45,11 +45,15 @@ public record LicenseCreateRequest(
     string Address,
     
     [Required(ErrorMessage = "Nationality is required.")] 
-    [MaxLength(30, ErrorMessage = "Nationality cannot exceed 30 characters.")] 
+    [MaxLength(30, ErrorMessage = "Nationality cannot exceed 30 characters.")]
+    [RegularExpression(@"^[a-zA-Z .'-]+$",
+        ErrorMessage = "Nationality must only contain letters, spaces, dots, apostrophes, and dashes.")]
     string Nationality,
     
     [Required(ErrorMessage = "Eye color is required.")] 
-    [MaxLength(30, ErrorMessage = "Eye color cannot exceed 30 characters.")] 
+    [MaxLength(30, ErrorMessage = "Eye color cannot exceed 30 characters.")]
+    [RegularExpression(@"^[a-zA-Z .'-]+$",
+        ErrorMessage = "Eye color must only contain letters, spaces, dots, apostrophes, and dashes.")]
     string EyeColor,
     
     [Required(ErrorMessage = "Height is required.")] 
