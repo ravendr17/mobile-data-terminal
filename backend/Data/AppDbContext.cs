@@ -45,8 +45,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Vehicle>(entity =>
         {
             entity.Property(e => e.PlateNumber).HasMaxLength(10);
-            entity.Property(e => e.MvFileNumber).HasMaxLength(30);
-            entity.Property(e => e.Vin).HasMaxLength(30);
+            entity.Property(e => e.MvFileNumber).HasMaxLength(20);
+            entity.Property(e => e.Vin).HasMaxLength(20);
             entity.Property(e => e.Make).HasMaxLength(30);
             entity.Property(e => e.Model).HasMaxLength(30);
             entity.Property(e => e.Color).HasMaxLength(30);
