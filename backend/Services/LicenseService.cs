@@ -56,8 +56,8 @@ public class LicenseService(AppDbContext context)
             Address = req.Address,
             Nationality = req.Nationality,
             EyeColor = req.EyeColor,
-            Height = req.Height,
-            Weight = req.Weight,
+            Height = req.Height!.Value,
+            Weight = req.Weight!.Value,
             BloodType = req.BloodType
         };
 
