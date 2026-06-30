@@ -21,6 +21,14 @@ public class AccountService(
     {
         var accounts = _context.Accounts;
         var licenses = _context.Licenses;
+        
+        bool usernameAlreadyExists = await accounts
+            .AnyAsync(a => a.Username == req.Username);
+
+        if (usernameAlreadyExists)
+        {
+            return Result<int>.Conflict($"Username {req.Username} already exists.");
+        }
 
         bool emailAlreadyExists = await accounts
             .AnyAsync(a => a.Email == req.Email);
@@ -65,6 +73,7 @@ public class AccountService(
         Account account = new Account
         {
             Email = req.Email,
+            Username = req.Username,
             RoleId = req.RoleId,
             LicenseId = licenseId
         };
@@ -83,6 +92,8 @@ public class AccountService(
             .Where(a => a.Id == id)
             .Select(a => new AccountGetResponse(
                 a.Id,
+                a.Username,
+                a.Email,
                 a.RoleId,
                 a.Role.Name,
                 a.LicenseId,
@@ -113,11 +124,11 @@ public class AccountService(
     {
         var account = await _context.Accounts
             .Include(a => a.Role)
-            .FirstOrDefaultAsync(a => a.Email == req.Email);
+            .FirstOrDefaultAsync(a => a.Email == req.Identifier || a.Username == req.Identifier);
 
         if (account == null)
         {
-            return Result<string>.Unauthorized("Invalid email or password.");
+            return Result<string>.Unauthorized("Invalid username/email or password.");
         }
 
         var result = _hasher.VerifyHashedPassword(
@@ -126,7 +137,7 @@ public class AccountService(
 
         if (result == PasswordVerificationResult.Failed)
         {
-            return Result<string>.Unauthorized("Invalid email or password.");
+            return Result<string>.Unauthorized("Invalid username/email or password.");
         }
 
         string token = _tokenProvider.Create(account);
