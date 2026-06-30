@@ -4,7 +4,9 @@ namespace Backend.DTOs;
 
 public record LicenseCreateRequest(
     [Required(ErrorMessage = "License number is required.")] 
-    [MaxLength(30, ErrorMessage = "License number cannot exceed 30 characters.")] 
+    [MaxLength(30, ErrorMessage = "License number cannot exceed 30 characters.")]
+    [RegularExpression(@"^[A-Z0-9-]+$",
+        ErrorMessage = "License number must only contain numbers, capital letters, and dashes.")]
     string Number,
     
     [Required(ErrorMessage = "License type ID is required.")] 
@@ -21,13 +23,13 @@ public record LicenseCreateRequest(
     int? Validity,
     
     [Required(ErrorMessage = "First name is required.")] 
-    [MaxLength(50, ErrorMessage = "First name cannot exceed 50 characters.")] 
+    [MaxLength(50, ErrorMessage = "First name cannot exceed 50 characters.")]
     string FirstName,
     
-    [MaxLength(50, ErrorMessage = "Middle name cannot exceed 50 characters.")] 
+    [MaxLength(50, ErrorMessage = "Middle name cannot exceed 50 characters.")]
     string? MiddleName,
     
-    [Required(ErrorMessage = "Last name is required.")] 
+    [Required(ErrorMessage = "Last name is required.")]
     [MaxLength(50, ErrorMessage = "Last name cannot exceed 50 characters.")] 
     string LastName,
     
@@ -52,11 +54,11 @@ public record LicenseCreateRequest(
     
     [Required(ErrorMessage = "Height is required.")] 
     [Range(1, 999, ErrorMessage = "Height must be between 1 and 999 (cm).")] 
-    int Height,
+    int? Height,
     
     [Required(ErrorMessage = "Weight is required.")] 
     [Range(1, 999, ErrorMessage = "Weight must be between 1 and 999 (kg).")] 
-    int Weight,
+    int? Weight,
     
     [Required(ErrorMessage = "Blood type is required.")] 
     [AllowedValues("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", 
