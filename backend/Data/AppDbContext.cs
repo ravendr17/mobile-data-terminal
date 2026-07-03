@@ -11,6 +11,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<AccountRole> AccountRoles { get; set; }
     public DbSet<LicenseType> LicenseTypes { get; set; }
     public DbSet<LicenseStatus> LicenseStatuses { get; set; }
+    public DbSet<Violation> Violations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -136,6 +137,48 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 new LicenseStatus { Id = 2, Name = "Revoked" },
                 new LicenseStatus { Id = 3, Name = "Expired" }
             );
+        });
+
+        modelBuilder.Entity<Violation>(entity =>
+        {
+            entity.Property(v => v.Name).HasMaxLength(50);
+            
+            entity.HasIndex(v => v.Name).IsUnique()
+                .HasDatabaseName("uq_violations_name");
+        });
+        
+        modelBuilder.Entity<Ticket>(entity =>
+        {
+            entity.HasIndex(t => t.ReferenceNumber).IsUnique()
+                .HasDatabaseName("uq_tickets_reference_number");
+
+            entity.HasOne(t => t.License)
+                .WithMany(l => l.Tickets)
+                .HasForeignKey(t => t.LicenseId)
+                .HasConstraintName("fk_tickets_licenses");
+
+            entity.Property(t => t.Status).HasMaxLength(20);
+            entity.Property(t => t.IncidentPlace).HasMaxLength(100);
+            entity.Property(t => t.OfficerNotes).HasMaxLength(255);
+
+            entity.Property(t => t.CreatedAt)
+                .HasDefaultValueSql("NOW() AT TIME ZONE 'UTC'")
+                .ValueGeneratedOnAdd();
+        });
+
+        modelBuilder.Entity<TicketViolation>(entity =>
+        {
+            entity.HasKey(tv => new { tv.TicketId, tv.ViolationId });
+            
+            entity.HasOne(tv => tv.Ticket)
+                .WithMany(t => t.TicketViolations)
+                .HasForeignKey(tv => tv.TicketId)
+                .HasConstraintName("fk_ticket_violations_tickets");
+
+            entity.HasOne(tv => tv.Violation)
+                .WithMany()
+                .HasForeignKey(tv => tv.ViolationId)
+                .HasConstraintName("fk_ticket_violations_violations");
         });
     }
 }
