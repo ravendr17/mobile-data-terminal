@@ -10,7 +10,7 @@ public class Ticket
     public string Status { get; set; } = string.Empty;
     public DateTime IncidentDate { get; set; }
     public string IncidentPlace { get; set; } = string.Empty;
-    public string OfficerNotes { get; set; } = string.Empty;
+    public string? OfficerNotes { get; set; } = string.Empty;
     public List<TicketViolation> TicketViolations { get; set; } = new();
 
     public License License { get; set; } = null!;
