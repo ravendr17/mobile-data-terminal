@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260704121102_NullableOfficerNotes")]
-    partial class NullableOfficerNotes
+    [Migration("20260704152439_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -367,16 +367,16 @@ namespace Backend.Migrations
                         .HasColumnName("status");
 
                     b.HasKey("Id")
-                        .HasName("pk_ticket");
+                        .HasName("pk_tickets");
 
                     b.HasIndex("LicenseId")
-                        .HasDatabaseName("ix_ticket_license_id");
+                        .HasDatabaseName("ix_tickets_license_id");
 
                     b.HasIndex("ReferenceNumber")
                         .IsUnique()
                         .HasDatabaseName("uq_tickets_reference_number");
 
-                    b.ToTable("ticket", (string)null);
+                    b.ToTable("tickets", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Entities.TicketViolation", b =>
@@ -394,12 +394,12 @@ namespace Backend.Migrations
                         .HasColumnName("fine_charged");
 
                     b.HasKey("TicketId", "ViolationId")
-                        .HasName("pk_ticket_violation");
+                        .HasName("pk_ticket_violations");
 
                     b.HasIndex("ViolationId")
-                        .HasDatabaseName("ix_ticket_violation_violation_id");
+                        .HasDatabaseName("ix_ticket_violations_violation_id");
 
-                    b.ToTable("ticket_violation", (string)null);
+                    b.ToTable("ticket_violations", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Entities.Vehicle", b =>
@@ -522,6 +522,142 @@ namespace Backend.Migrations
                         .HasDatabaseName("uq_violations_name");
 
                     b.ToTable("violations", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            InitialFine = 3000m,
+                            IsTiered = false,
+                            Name = "DRIVING WITHOUT VALID LICENSE"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            InitialFine = 1000m,
+                            IsTiered = false,
+                            Name = "FAILURE TO CARRY LICENSE"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            InitialFine = 3000m,
+                            IsTiered = false,
+                            Name = "FAKE DRIVER'S LICENSE"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            InitialFine = 10000m,
+                            IsTiered = false,
+                            Name = "DRIVING UNREGISTERED VEHICLE"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            InitialFine = 5000m,
+                            IsTiered = false,
+                            Name = "ILLEGAL MODIFICATIONS"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            InitialFine = 5000m,
+                            IsTiered = false,
+                            Name = "DEFECTIVE/IMPROPER EQUIPMENT"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            InitialFine = 2000m,
+                            IsTiered = true,
+                            Name = "RECKLESS DRIVING",
+                            SecondFine = 3000m,
+                            ThirdFine = 10000m
+                        },
+                        new
+                        {
+                            Id = 8,
+                            InitialFine = 1000m,
+                            IsTiered = true,
+                            Name = "NO SEATBELT",
+                            SecondFine = 3000m,
+                            ThirdFine = 5000m
+                        },
+                        new
+                        {
+                            Id = 9,
+                            InitialFine = 1500m,
+                            IsTiered = true,
+                            Name = "NO HELMET",
+                            SecondFine = 3000m,
+                            ThirdFine = 5000m
+                        },
+                        new
+                        {
+                            Id = 10,
+                            InitialFine = 20000m,
+                            IsTiered = true,
+                            Name = "DRIVING UNDER INFLUENCE",
+                            SecondFine = 50000m,
+                            ThirdFine = 100000m
+                        },
+                        new
+                        {
+                            Id = 11,
+                            InitialFine = 1000m,
+                            IsTiered = false,
+                            Name = "OBSTRUCTION"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            InitialFine = 1000m,
+                            IsTiered = false,
+                            Name = "NO OR/CR"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            InitialFine = 2000m,
+                            IsTiered = false,
+                            Name = "OVERLOADING PASSENGERS"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            InitialFine = 1000m,
+                            IsTiered = false,
+                            Name = "OVER-SPEEDING"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            InitialFine = 1000m,
+                            IsTiered = false,
+                            Name = "BEATING THE RED LIGHT"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            InitialFine = 1000m,
+                            IsTiered = false,
+                            Name = "ILLEGAL PARKING"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            InitialFine = 1000m,
+                            IsTiered = false,
+                            Name = "USING PHONE WHILE DRIVING"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            InitialFine = 2000m,
+                            IsTiered = false,
+                            Name = "COUNTERFLOWING"
+                        });
                 });
 
             modelBuilder.Entity("Backend.Entities.Account", b =>

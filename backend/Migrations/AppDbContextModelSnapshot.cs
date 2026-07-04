@@ -364,16 +364,16 @@ namespace Backend.Migrations
                         .HasColumnName("status");
 
                     b.HasKey("Id")
-                        .HasName("pk_ticket");
+                        .HasName("pk_tickets");
 
                     b.HasIndex("LicenseId")
-                        .HasDatabaseName("ix_ticket_license_id");
+                        .HasDatabaseName("ix_tickets_license_id");
 
                     b.HasIndex("ReferenceNumber")
                         .IsUnique()
                         .HasDatabaseName("uq_tickets_reference_number");
 
-                    b.ToTable("ticket", (string)null);
+                    b.ToTable("tickets", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Entities.TicketViolation", b =>
@@ -391,12 +391,12 @@ namespace Backend.Migrations
                         .HasColumnName("fine_charged");
 
                     b.HasKey("TicketId", "ViolationId")
-                        .HasName("pk_ticket_violation");
+                        .HasName("pk_ticket_violations");
 
                     b.HasIndex("ViolationId")
-                        .HasDatabaseName("ix_ticket_violation_violation_id");
+                        .HasDatabaseName("ix_ticket_violations_violation_id");
 
-                    b.ToTable("ticket_violation", (string)null);
+                    b.ToTable("ticket_violations", (string)null);
                 });
 
             modelBuilder.Entity("Backend.Entities.Vehicle", b =>

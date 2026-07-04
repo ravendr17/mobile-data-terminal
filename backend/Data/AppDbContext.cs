@@ -12,6 +12,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<LicenseType> LicenseTypes { get; set; }
     public DbSet<LicenseStatus> LicenseStatuses { get; set; }
     public DbSet<Violation> Violations { get; set; }
+    public DbSet<Ticket> Tickets { get; set; }
+    public DbSet<TicketViolation> TicketViolations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
