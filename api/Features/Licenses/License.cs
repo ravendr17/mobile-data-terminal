@@ -1,0 +1,28 @@
+namespace MobileDataTerminal.Api.Features.Licenses;
+
+public class License
+{
+    public int Id { get; set; }
+    public string Number { get; set; } = string.Empty;
+    public int TypeId { get; set; }
+    public LicenseType Type { get; set; } = null!;
+    public int StatusId { get; set; }
+    public LicenseStatus Status { get; set; } = null!;
+    public DateOnly IssuanceDate { get; set; }
+    public DateOnly ExpiryDate { get; set; }
+    public string FirstName { get; set; } = string.Empty;
+    public string? MiddleName { get; set; }
+    public string LastName { get; set; } = string.Empty;
+    public Sex Sex { get; set; }
+    public DateOnly DateOfBirth { get; set; }
+    public string Address { get; set; } = string.Empty;
+    public int NationalityId { get; set; }
+    public Nationality Nationality { get; set; } = null!;
+    public EyeColor EyeColor { get; set; }
+    public int Height { get; set; }
+    public int Weight { get; set; }
+    public BloodType BloodType { get; set; }
+
+    // public List<Vehicle> Vehicles { get; set; } = new();
+    // public List<Ticket> Tickets { get; set; } = new();
+}

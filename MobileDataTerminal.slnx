@@ -1,5 +1,4 @@
 <Solution>
-  <Folder Name="/backend/">
-    <Project Path="backend/Backend.csproj" />
-  </Folder>
+  <Project Path="backend/Backend.csproj" />
+  <Project Path="api/MobileDataTerminal.Api.csproj" />
 </Solution>
