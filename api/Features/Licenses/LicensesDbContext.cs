@@ -98,12 +98,12 @@ public class LicensesDbContext(DbContextOptions<LicensesDbContext> options): DbC
             e.HasOne(e => e.Status)
                 .WithMany()
                 .HasForeignKey(e => e.StatusId)
-                .HasForeignKey("fk_licenses_statuses");
+                .HasConstraintName("fk_licenses_statuses");
 
             e.HasOne(e => e.Nationality)
                 .WithMany()
                 .HasForeignKey(e => e.NationalityId)
-                .HasForeignKey("fk_licenses_nationalities");
+                .HasConstraintName("fk_licenses_nationalities");
         });
     }
 }
