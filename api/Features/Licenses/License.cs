@@ -24,7 +24,7 @@ public class License
     public int Height { get; set; }
     public int Weight { get; set; }
     public int BloodTypeId { get; set; }
-    public BloodType BloodType { get; set; }
+    public BloodType BloodType { get; set; } = null!;
 
     // public List<Vehicle> Vehicles { get; set; } = new();
     // public List<Ticket> Tickets { get; set; } = new();
