@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using MobileDataTerminal.Api.Exceptions;
 using MobileDataTerminal.Api.Features.Licenses;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
@@ -29,5 +31,6 @@ app.UseHttpsRedirection();
 app.UseExceptionHandler();
 
 app.MapCreateLicense();
+app.MapGetLicense();
 
 app.Run();

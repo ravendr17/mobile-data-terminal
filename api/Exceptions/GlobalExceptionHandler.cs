@@ -15,12 +15,20 @@ public sealed class GlobalExceptionHandler(
     {
         logger.LogError(exception, "Unhandled exception occurred");
 
-        httpContext.Response.StatusCode = exception switch
+        var (statusCode, message) = exception switch
         {
-            ApplicationException => StatusCodes.Status400BadRequest,
-            ConflictException => StatusCodes.Status409Conflict,
-            _ => StatusCodes.Status500InternalServerError
+            ApplicationException => 
+                (StatusCodes.Status400BadRequest, exception.Message),
+            ConflictException => 
+                (StatusCodes.Status409Conflict, exception.Message),
+            ResourceNotFoundException => 
+                (StatusCodes.Status404NotFound, exception.Message),
+            BadHttpRequestException => 
+                (StatusCodes.Status400BadRequest, "Invalid/malformed request body."),
+            _ => (StatusCodes.Status500InternalServerError, "An unexpected server error occured.")
         };
+
+        httpContext.Response.StatusCode = statusCode;
 
         return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
         {
@@ -30,7 +38,7 @@ public sealed class GlobalExceptionHandler(
             {
                 Type = exception.GetType().Name,
                 Title = "An error occurred",
-                Detail = exception.Message
+                Detail = message
             }
         });
     }
