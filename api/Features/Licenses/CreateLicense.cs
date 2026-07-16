@@ -3,7 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MobileDataTerminal.Api.Exceptions;
 
-namespace MobileDataTerminal.Api.Features.Licenses.CreateLicense;
+namespace MobileDataTerminal.Api.Features.Licenses;
 
 public static class CreateLicense
 {
@@ -122,43 +122,58 @@ public static class CreateLicense
             await context.SaveChangesAsync();
         }
         catch (DbUpdateException ex) 
-            when (ex.InnerException is SqlException sx && (sx.Number is 2601 or 2627))
+            when (ex.InnerException is SqlException sqlEx)
         {
-            throw new UniqueConstraintViolationException($"License {req.LicenseNumber} already exists.");
+            string message = sqlEx.Message;
+            
+            if (message.Contains("uq_licenses_number"))
+            {
+                throw new ConflictException($"License {req.LicenseNumber} already exists.");   
+            }
+
+            if (message.Contains("fk_licenses_types"))
+            {
+                throw new ResourceNotFoundException($"License type ID {req.TypeId} not found");
+            }
+
+            if (message.Contains("fk_licenses_statuses"))
+            {
+                throw new ResourceNotFoundException($"License status ID {req.StatusId} not found");
+            }
+
+            if (message.Contains("fk_licenses_nationalities"))
+            {
+                throw new ResourceNotFoundException($"Nationality ID {req.NationalityId} not found.");
+            }
+
+            throw;
         }
         
-        var names = await context.Licenses
+        return await context.Licenses
             .Where(l => l.Id == license.Id)
-            .Select(l => new
-            {
-                TypeName = l.Type.Name,
-                StatusName = l.Status.Name,
-                NationalityName = l.Nationality.Name
-            })
+            .Select(l => new Response(
+                l.Id,
+                l.Number,
+                l.TypeId,
+                l.Type.Name,
+                l.StatusId,
+                l.Status.Name,
+                l.IssuanceDate,
+                l.ExpiryDate,
+                l.FirstName,
+                l.MiddleName,
+                l.LastName,
+                l.Sex,
+                l.DateOfBirth,
+                l.Address,
+                l.NationalityId,
+                l.Nationality.Name,
+                l.EyeColor,
+                l.Height,
+                l.Weight,
+                l.BloodType
+            ))
             .FirstAsync();
-        
-        return new Response(
-            license.Id,
-            license.Number,
-            license.TypeId,
-            names.TypeName,
-            license.StatusId,
-            names.StatusName,
-            license.IssuanceDate,
-            license.ExpiryDate,
-            license.FirstName,
-            license.MiddleName,
-            license.LastName,
-            license.Sex,
-            license.DateOfBirth,
-            license.Address,
-            license.NationalityId,
-            names.NationalityName,
-            license.EyeColor,
-            license.Height,
-            license.Weight,
-            license.BloodType
-        );
     }
 
     public static void MapCreateLicense(this IEndpointRouteBuilder app)
