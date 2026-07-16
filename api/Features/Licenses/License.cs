@@ -13,14 +13,17 @@ public class License
     public string FirstName { get; set; } = string.Empty;
     public string? MiddleName { get; set; }
     public string LastName { get; set; } = string.Empty;
-    public Sex Sex { get; set; }
+    public int SexId { get; set; }
+    public Sex Sex { get; set; } = null!;
     public DateOnly DateOfBirth { get; set; }
     public string Address { get; set; } = string.Empty;
     public int NationalityId { get; set; }
     public Nationality Nationality { get; set; } = null!;
-    public EyeColor EyeColor { get; set; }
+    public int EyeColorId { get; set; }
+    public EyeColor EyeColor { get; set; } = null!;
     public int Height { get; set; }
     public int Weight { get; set; }
+    public int BloodTypeId { get; set; }
     public BloodType BloodType { get; set; }
 
     // public List<Vehicle> Vehicles { get; set; } = new();

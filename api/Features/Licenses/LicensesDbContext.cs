@@ -7,6 +7,9 @@ public class LicensesDbContext(DbContextOptions<LicensesDbContext> options): DbC
     public DbSet<License> Licenses { get; set; }
     public DbSet<LicenseType> LicenseTypes { get; set; }
     public DbSet<LicenseStatus> LicenseStatuses { get; set; }
+    public DbSet<Sex> Sexes { get; set; }
+    public DbSet<EyeColor> EyeColors { get; set; }
+    public DbSet<BloodType> BloodTypes { get; set; }
     public DbSet<Nationality> Nationalities { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,6 +39,52 @@ public class LicensesDbContext(DbContextOptions<LicensesDbContext> options): DbC
                 new LicenseStatus {Id = 1, Name = "Active"},
                 new LicenseStatus {Id = 2, Name = "Revoked"},
                 new LicenseStatus {Id = 3, Name = "Expired"}
+            );
+        });
+
+        modelBuilder.Entity<Sex>(e =>
+        {
+            e.Property(e => e.Name).HasMaxLength(50);
+            e.HasIndex(e => e.Name)
+                .IsUnique().HasDatabaseName("uq_sexes_name");
+
+            e.HasData(
+                new Sex {Id = 1, Name = "Male"},
+                new Sex {Id = 2, Name = "Female"}
+            );
+        });
+
+        modelBuilder.Entity<EyeColor>(e =>
+        {
+            e.Property(e => e.Name).HasMaxLength(50);
+            e.HasIndex(e => e.Name)
+                .IsUnique().HasDatabaseName("uq_eye_colors_name");
+            
+            e.HasData(
+                new EyeColor {Id = 1, Name = "Brown"},
+                new EyeColor {Id = 2, Name = "Blue"},
+                new EyeColor {Id = 3, Name = "Green"},
+                new EyeColor {Id = 4, Name = "Hazel"},
+                new EyeColor {Id = 5, Name = "Gray"},
+                new EyeColor {Id = 6, Name = "Amber"}
+            );
+        });
+        
+        modelBuilder.Entity<BloodType>(e =>
+        {
+            e.Property(e => e.Name).HasMaxLength(50);
+            e.HasIndex(e => e.Name)
+                .IsUnique().HasDatabaseName("uq_blood_types_name");
+            
+            e.HasData(
+                new BloodType {Id = 1, Name = "A+"},
+                new BloodType {Id = 2, Name = "A-"},
+                new BloodType {Id = 3, Name = "B+"},
+                new BloodType {Id = 4, Name = "B-"},
+                new BloodType {Id = 5, Name = "AB+"},
+                new BloodType {Id = 6, Name = "AB-"},
+                new BloodType {Id = 7, Name = "O+"},
+                new BloodType {Id = 8, Name = "O-"}
             );
         });
 
@@ -104,6 +153,21 @@ public class LicensesDbContext(DbContextOptions<LicensesDbContext> options): DbC
                 .WithMany()
                 .HasForeignKey(e => e.NationalityId)
                 .HasConstraintName("fk_licenses_nationalities");
+
+            e.HasOne(e => e.Sex)
+                .WithMany()
+                .HasForeignKey(e => e.SexId)
+                .HasConstraintName("fk_licenses_sexes");
+
+            e.HasOne(e => e.EyeColor)
+                .WithMany()
+                .HasForeignKey(e => e.EyeColorId)
+                .HasConstraintName("fk_licenses_eye_colors");
+
+            e.HasOne(e => e.BloodType)
+                .WithMany()
+                .HasForeignKey(e => e.BloodTypeId)
+                .HasConstraintName("fk_licenses_blood_types");
         });
     }
 }

@@ -16,14 +16,14 @@ public static class CreateLicense
         string FirstName,
         string? MiddleName,
         string LastName,
-        Sex Sex,
+        int SexId,
         DateOnly DateOfBirth,
         string Address,
         int NationalityId,
-        EyeColor EyeColor,
+        int EyeColorId,
         int Height,
         int Weight,
-        BloodType BloodType
+        int BloodTypeId
     );
     
     public record Response(
@@ -38,15 +38,18 @@ public static class CreateLicense
         string FirstName,
         string? MiddleName,
         string LastName,
-        Sex Sex,
+        int SexId,
+        string Sex,
         DateOnly DateOfBirth,
         string Address,
         int NationalityId,
         string Nationality,
-        EyeColor EyeColor,
+        int EyeColorId,
+        string EyeColor,
         int Height,
         int Weight,
-        BloodType BloodType
+        int BloodTypeId,
+        string BloodType
     );
 
     public class Validator : AbstractValidator<Request>
@@ -73,8 +76,8 @@ public static class CreateLicense
             RuleFor(x => x.LastName)
                 .NotEmpty()
                 .MaximumLength(50);
-            RuleFor(x => x.Sex)
-                .IsInEnum();
+            RuleFor(x => x.SexId)
+                .GreaterThan(0);
             RuleFor(x => x.DateOfBirth)
                 .GreaterThan(new DateOnly(1900, 1, 1))
                 .LessThan(DateOnly.FromDateTime(DateTime.UtcNow));
@@ -83,14 +86,14 @@ public static class CreateLicense
                 .MaximumLength(250);
             RuleFor(x => x.NationalityId)
                 .GreaterThan(0);
-            RuleFor(x => x.EyeColor)
-                .IsInEnum();
+            RuleFor(x => x.EyeColorId)
+                .GreaterThan(0);
             RuleFor(x => x.Height)
                 .InclusiveBetween(1, 999);
             RuleFor(x => x.Weight)
                 .InclusiveBetween(1, 999);
-            RuleFor(x => x.BloodType)
-                .IsInEnum();
+            RuleFor(x => x.BloodTypeId)
+                .GreaterThan(0);
         }
     }
 
@@ -106,14 +109,14 @@ public static class CreateLicense
             FirstName = req.FirstName,
             MiddleName = req.MiddleName,
             LastName = req.LastName,
-            Sex = req.Sex,
+            SexId = req.SexId,
             DateOfBirth = req.DateOfBirth,
             Address = req.Address,
             NationalityId = req.NationalityId,
-            EyeColor = req.EyeColor,
+            EyeColorId = req.EyeColorId,
             Height = req.Height,
             Weight = req.Weight,
-            BloodType = req.BloodType,
+            BloodTypeId = req.BloodTypeId,
         };
 
         try
@@ -163,15 +166,18 @@ public static class CreateLicense
                 l.FirstName,
                 l.MiddleName,
                 l.LastName,
-                l.Sex,
+                l.SexId,
+                l.Sex.Name,
                 l.DateOfBirth,
                 l.Address,
                 l.NationalityId,
                 l.Nationality.Name,
-                l.EyeColor,
+                l.EyeColor.Id,
+                l.EyeColor.Name,
                 l.Height,
                 l.Weight,
-                l.BloodType
+                l.BloodTypeId,
+                l.BloodType.Name
             ))
             .FirstAsync();
     }
