@@ -67,7 +67,7 @@ public static class CreateLicense
                 .GreaterThan(new DateOnly(1990, 1, 1))
                 .LessThan(DateOnly.FromDateTime(DateTime.UtcNow));
             RuleFor(x => x.ValidityPeriod)
-                .Must(x => x is 3 or 5);
+                .Must(x => x is 5 or 10);
             RuleFor(x => x.FirstName)
                 .NotEmpty()
                 .MaximumLength(50);
@@ -133,22 +133,31 @@ public static class CreateLicense
             {
                 throw new ConflictException($"License {req.LicenseNumber} already exists.");   
             }
-
             if (message.Contains("fk_licenses_types"))
             {
-                throw new ResourceNotFoundException($"License type ID {req.TypeId} not found");
+                throw new ResourceNotFoundException($"License type ID {req.TypeId} not found.");
             }
-
             if (message.Contains("fk_licenses_statuses"))
             {
-                throw new ResourceNotFoundException($"License status ID {req.StatusId} not found");
+                throw new ResourceNotFoundException($"License status ID {req.StatusId} not found.");
             }
-
             if (message.Contains("fk_licenses_nationalities"))
             {
                 throw new ResourceNotFoundException($"Nationality ID {req.NationalityId} not found.");
             }
-
+            if (message.Contains("fk_licenses_sexes"))
+            {
+                throw new ResourceNotFoundException($"Sex ID {req.SexId} not found.");
+            }
+            if (message.Contains("fk_licenses_eye_colors"))
+            {
+                throw new ResourceNotFoundException($"Eye color ID {req.BloodTypeId} not found.");
+            }
+            if (message.Contains("fk_licenses_blood_types"))
+            {
+                throw new ResourceNotFoundException($"Blood type ID {req.BloodTypeId} not found.");
+            }
+            
             throw;
         }
         
@@ -184,7 +193,7 @@ public static class CreateLicense
 
     public static void MapCreateLicense(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/licenses", async (
+        app.MapPost("/api/licenses", async (
             Request req,
             IValidator<Request> validator,
             LicensesDbContext context) =>
