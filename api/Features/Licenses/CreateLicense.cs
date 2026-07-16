@@ -1,7 +1,9 @@
 using FluentValidation;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using MobileDataTerminal.Api.Exceptions;
 
-namespace MobileDataTerminal.Api.Features.Licenses;
+namespace MobileDataTerminal.Api.Features.Licenses.CreateLicense;
 
 public static class CreateLicense
 {
@@ -23,7 +25,7 @@ public static class CreateLicense
         int Weight,
         BloodType BloodType
     );
-
+    
     public record Response(
         int Id,
         string LicenseNumber,
@@ -114,9 +116,17 @@ public static class CreateLicense
             BloodType = req.BloodType,
         };
 
-        context.Licenses.Add(license);
-        await context.SaveChangesAsync();
-
+        try
+        {
+            context.Licenses.Add(license);
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateException ex) 
+            when (ex.InnerException is SqlException sx && (sx.Number is 2601 or 2627))
+        {
+            throw new UniqueConstraintViolationException($"License {req.LicenseNumber} already exists.");
+        }
+        
         var names = await context.Licenses
             .Where(l => l.Id == license.Id)
             .Select(l => new
