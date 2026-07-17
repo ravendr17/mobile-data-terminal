@@ -38,5 +38,6 @@ app.MapCreateLicense();
 app.MapGetLicense();
 app.MapDeleteLicense();
 app.MapCreateUser();
+app.MapGetUser();
 
 app.Run();
