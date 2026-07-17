@@ -5,6 +5,7 @@ using MobileDataTerminal.Api.Data;
 using MobileDataTerminal.Api.Exceptions;
 using MobileDataTerminal.Api.Features.Licenses;
 using MobileDataTerminal.Api.Features.Users;
+using MobileDataTerminal.Api.Features.Vehicles;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -47,5 +48,8 @@ app.MapDeleteLicense();
 app.MapCreateUser();
 app.MapGetUser();
 app.MapDeleteUser();
+app.MapCreateVehicle();
+app.MapGetVehicle();
+app.MapDeleteVehicle();
 
 app.Run();
