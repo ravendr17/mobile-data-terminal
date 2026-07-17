@@ -32,5 +32,6 @@ app.UseExceptionHandler();
 
 app.MapCreateLicense();
 app.MapGetLicense();
+app.MapDeleteLicense();
 
 app.Run();
