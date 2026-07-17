@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MobileDataTerminal.Api.Data;
 using MobileDataTerminal.Api.Exceptions;
 
 namespace MobileDataTerminal.Api.Features.Licenses;
@@ -9,7 +10,7 @@ public static class DeleteLicense
     {
         app.MapDelete("/api/licenses/{licenseId:int}", async (
             int licenseId,
-            LicensesDbContext context) =>
+            AppDbContext context) =>
         {
             var license = await context.Licenses
                 .FirstOrDefaultAsync(l => l.Id == licenseId);

@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using MobileDataTerminal.Api.Data;
 using MobileDataTerminal.Api.Exceptions;
 
 namespace MobileDataTerminal.Api.Features.Licenses;
@@ -102,7 +103,7 @@ public static class CreateLicense
         app.MapPost("/api/licenses", async (
             Request req,
             IValidator<Request> validator,
-            LicensesDbContext context) =>
+            AppDbContext context) =>
         {
             var validationResult = await validator.ValidateAsync(req);
 

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MobileDataTerminal.Api.Data;
 using MobileDataTerminal.Api.Exceptions;
 
 namespace MobileDataTerminal.Api.Features.Licenses;
@@ -35,7 +36,7 @@ public static class GetLicense
     {
         app.MapGet("/api/licenses/{licenseNumber}", async (
             string licenseNumber,
-            LicensesDbContext context) =>
+            AppDbContext context) =>
         {
             var response = await context.Licenses
                 .Where(l => l.Number == licenseNumber)

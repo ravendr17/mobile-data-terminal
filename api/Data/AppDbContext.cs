@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using MobileDataTerminal.Api.Features.Licenses;
+using MobileDataTerminal.Api.Features.Users;
 
-namespace MobileDataTerminal.Api.Features.Licenses;
-
-public class LicensesDbContext(DbContextOptions<LicensesDbContext> options): DbContext(options)
+namespace MobileDataTerminal.Api.Data;
+public class AppDbContext(DbContextOptions<AppDbContext> options): DbContext(options)
 {
     public DbSet<License> Licenses { get; set; }
     public DbSet<LicenseType> LicenseTypes { get; set; }
@@ -11,7 +12,10 @@ public class LicensesDbContext(DbContextOptions<LicensesDbContext> options): DbC
     public DbSet<EyeColor> EyeColors { get; set; }
     public DbSet<BloodType> BloodTypes { get; set; }
     public DbSet<Nationality> Nationalities { get; set; }
-
+    
+    public DbSet<User> Users { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -131,9 +135,9 @@ public class LicensesDbContext(DbContextOptions<LicensesDbContext> options): DbC
         modelBuilder.Entity<License>(e =>
         {
             e.Property(e => e.Number).HasMaxLength(30);
-            e.Property(e => e.FirstName).HasMaxLength(50);
-            e.Property(e => e.MiddleName).HasMaxLength(50);
-            e.Property(e => e.LastName).HasMaxLength(50);
+            e.Property(e => e.FirstName).HasMaxLength(100);
+            e.Property(e => e.MiddleName).HasMaxLength(100);
+            e.Property(e => e.LastName).HasMaxLength(100);
             e.Property(e => e.Address).HasMaxLength(250);
             
             e.HasIndex(e => e.Number)
@@ -168,6 +172,46 @@ public class LicensesDbContext(DbContextOptions<LicensesDbContext> options): DbC
                 .WithMany()
                 .HasForeignKey(e => e.BloodTypeId)
                 .HasConstraintName("fk_licenses_blood_types");
+        });
+        
+        modelBuilder.Entity<UserRole>(e =>
+        {
+            e.Property(e => e.Name).HasMaxLength(50);
+            e.HasIndex(e => e.Name)
+                .IsUnique().HasDatabaseName("uq_user_roles_name");
+
+            e.HasData(
+                new UserRole {Id = 1, Name = "Civilian"},
+                new UserRole {Id = 2, Name = "Officer"},
+                new UserRole {Id = 3, Name = "Supervisor"},
+                new UserRole {Id = 4, Name = "Admin"}
+            );
+        });
+
+        modelBuilder.Entity<User>(e =>
+        {
+            e.Property(e => e.Username).HasMaxLength(30);
+            e.Property(e => e.Email).HasMaxLength(100);
+            e.Property(e => e.Password).HasMaxLength(255);
+
+            e.HasIndex(e => e.Username)
+                .IsUnique().HasDatabaseName("uq_users_username");
+
+            e.HasIndex(e => e.Email)
+                .IsUnique().HasDatabaseName("uq_users_email");
+
+            e.HasIndex(e => e.LicenseId)
+                .IsUnique().HasDatabaseName("uq_users_license_id");
+            
+            e.HasOne(e => e.Role)
+                .WithMany()
+                .HasForeignKey(e => e.RoleId)
+                .HasConstraintName("fk_users_user_roles");
+
+            e.HasOne(e => e.License)
+                .WithOne()
+                .HasForeignKey<User>(e => e.LicenseId)
+                .HasConstraintName("fk_users_licenses");
         });
     }
 }

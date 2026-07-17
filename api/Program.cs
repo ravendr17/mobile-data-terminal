@@ -1,7 +1,9 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using MobileDataTerminal.Api.Data;
 using MobileDataTerminal.Api.Exceptions;
 using MobileDataTerminal.Api.Features.Licenses;
+using MobileDataTerminal.Api.Features.Users;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,9 +12,11 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
-builder.Services.AddDbContext<LicensesDbContext>(options =>
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
+
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(connectionString);
 });
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -26,12 +30,13 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.UseHttpsRedirection();
-
 app.UseExceptionHandler();
+
+app.UseHttpsRedirection();
 
 app.MapCreateLicense();
 app.MapGetLicense();
 app.MapDeleteLicense();
+app.MapCreateUser();
 
 app.Run();
