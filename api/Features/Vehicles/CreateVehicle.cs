@@ -138,20 +138,23 @@ public static class CreateVehicle
 
                 throw;
             }
-            
-            var response = new CreateVehicleResponse(
-                vehicle.Id,
-                vehicle.PlateNumber,
-                vehicle.MvFileNumber!,
-                vehicle.Vin,
-                vehicle.RegisterIssuanceDate,
-                vehicle.RegisterExpiryDate,
-                vehicle.Make,
-                vehicle.Model,
-                vehicle.Year,
-                vehicle.Color,
-                req.LicenseNumber
-            );
+
+            var response = await context.Vehicles
+                .Where(v => v.Id == vehicle.Id)
+                .Select(v => new CreateVehicleResponse(
+                    v.Id,
+                    v.PlateNumber,
+                    v.MvFileNumber!,
+                    v.Vin,
+                    v.RegisterIssuanceDate,
+                    v.RegisterExpiryDate,
+                    v.Make,
+                    v.Model,
+                    v.Year,
+                    v.Color,
+                    v.License!.Number
+                ))
+                .FirstAsync();
 
             return Results.Created($"/api/vehicles/{response.Id}", response);
         });

@@ -128,7 +128,7 @@ public static class CreateUser
                     u.Email,
                     u.RoleId,
                     u.Role.Name,
-                    u.License != null ? u.License.Number : null
+                    u.License!.Number
                 ))
                 .FirstAsync();
 
