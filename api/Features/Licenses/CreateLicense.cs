@@ -26,7 +26,7 @@ public static class CreateLicense
         int BloodTypeId
     );
     
-    public record Response(
+    private record Response(
         int Id,
         string LicenseNumber,
         int TypeId,
@@ -97,100 +97,6 @@ public static class CreateLicense
         }
     }
 
-    public static async Task<Response> Handler(Request req, LicensesDbContext context)
-    {
-        License license = new License
-        {
-            Number = req.LicenseNumber,
-            TypeId = req.TypeId,
-            StatusId = req.StatusId,
-            IssuanceDate = req.IssuanceDate,
-            ExpiryDate = req.IssuanceDate.AddYears(req.ValidityPeriod),
-            FirstName = req.FirstName,
-            MiddleName = req.MiddleName,
-            LastName = req.LastName,
-            SexId = req.SexId,
-            DateOfBirth = req.DateOfBirth,
-            Address = req.Address,
-            NationalityId = req.NationalityId,
-            EyeColorId = req.EyeColorId,
-            Height = req.Height,
-            Weight = req.Weight,
-            BloodTypeId = req.BloodTypeId,
-        };
-
-        try
-        {
-            context.Licenses.Add(license);
-            await context.SaveChangesAsync();
-        }
-        catch (DbUpdateException ex) 
-            when (ex.InnerException is SqlException sqlEx)
-        {
-            string message = sqlEx.Message;
-            
-            if (message.Contains("uq_licenses_number"))
-            {
-                throw new ConflictException($"License {req.LicenseNumber} already exists.");   
-            }
-            if (message.Contains("fk_licenses_types"))
-            {
-                throw new ResourceNotFoundException($"License type ID {req.TypeId} not found.");
-            }
-            if (message.Contains("fk_licenses_statuses"))
-            {
-                throw new ResourceNotFoundException($"License status ID {req.StatusId} not found.");
-            }
-            if (message.Contains("fk_licenses_nationalities"))
-            {
-                throw new ResourceNotFoundException($"Nationality ID {req.NationalityId} not found.");
-            }
-            if (message.Contains("fk_licenses_sexes"))
-            {
-                throw new ResourceNotFoundException($"Sex ID {req.SexId} not found.");
-            }
-            if (message.Contains("fk_licenses_eye_colors"))
-            {
-                throw new ResourceNotFoundException($"Eye color ID {req.BloodTypeId} not found.");
-            }
-            if (message.Contains("fk_licenses_blood_types"))
-            {
-                throw new ResourceNotFoundException($"Blood type ID {req.BloodTypeId} not found.");
-            }
-            
-            throw;
-        }
-        
-        return await context.Licenses
-            .Where(l => l.Id == license.Id)
-            .Select(l => new Response(
-                l.Id,
-                l.Number,
-                l.TypeId,
-                l.Type.Name,
-                l.StatusId,
-                l.Status.Name,
-                l.IssuanceDate,
-                l.ExpiryDate,
-                l.FirstName,
-                l.MiddleName,
-                l.LastName,
-                l.SexId,
-                l.Sex.Name,
-                l.DateOfBirth,
-                l.Address,
-                l.NationalityId,
-                l.Nationality.Name,
-                l.EyeColor.Id,
-                l.EyeColor.Name,
-                l.Height,
-                l.Weight,
-                l.BloodTypeId,
-                l.BloodType.Name
-            ))
-            .FirstAsync();
-    }
-
     public static void MapCreateLicense(this IEndpointRouteBuilder app)
     {
         app.MapPost("/api/licenses", async (
@@ -205,9 +111,98 @@ public static class CreateLicense
                 return Results.ValidationProblem(validationResult.ToDictionary());
             }
 
-            var response = await Handler(req, context);
+            License license = new License
+            {
+                Number = req.LicenseNumber,
+                TypeId = req.TypeId,
+                StatusId = req.StatusId,
+                IssuanceDate = req.IssuanceDate,
+                ExpiryDate = req.IssuanceDate.AddYears(req.ValidityPeriod),
+                FirstName = req.FirstName,
+                MiddleName = req.MiddleName,
+                LastName = req.LastName,
+                SexId = req.SexId,
+                DateOfBirth = req.DateOfBirth,
+                Address = req.Address,
+                NationalityId = req.NationalityId,
+                EyeColorId = req.EyeColorId,
+                Height = req.Height,
+                Weight = req.Weight,
+                BloodTypeId = req.BloodTypeId,
+            };
 
-            return Results.Created($"licenses/{response.Id}",response);
+            try
+            {
+                context.Licenses.Add(license);
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) 
+                when (ex.InnerException is SqlException sqlEx)
+            {
+                string message = sqlEx.Message;
+                
+                if (message.Contains("uq_licenses_number"))
+                {
+                    throw new ConflictException($"License {req.LicenseNumber} already exists.");   
+                }
+                if (message.Contains("fk_licenses_types"))
+                {
+                    throw new ResourceNotFoundException($"License type ID {req.TypeId} not found.");
+                }
+                if (message.Contains("fk_licenses_statuses"))
+                {
+                    throw new ResourceNotFoundException($"License status ID {req.StatusId} not found.");
+                }
+                if (message.Contains("fk_licenses_nationalities"))
+                {
+                    throw new ResourceNotFoundException($"Nationality ID {req.NationalityId} not found.");
+                }
+                if (message.Contains("fk_licenses_sexes"))
+                {
+                    throw new ResourceNotFoundException($"Sex ID {req.SexId} not found.");
+                }
+                if (message.Contains("fk_licenses_eye_colors"))
+                {
+                    throw new ResourceNotFoundException($"Eye color ID {req.EyeColorId} not found.");
+                }
+                if (message.Contains("fk_licenses_blood_types"))
+                {
+                    throw new ResourceNotFoundException($"Blood type ID {req.BloodTypeId} not found.");
+                }
+                
+                throw;
+            }
+            
+            var response = await context.Licenses
+                .Where(l => l.Id == license.Id)
+                .Select(l => new Response(
+                    l.Id,
+                    l.Number,
+                    l.TypeId,
+                    l.Type.Name,
+                    l.StatusId,
+                    l.Status.Name,
+                    l.IssuanceDate,
+                    l.ExpiryDate,
+                    l.FirstName,
+                    l.MiddleName,
+                    l.LastName,
+                    l.SexId,
+                    l.Sex.Name,
+                    l.DateOfBirth,
+                    l.Address,
+                    l.NationalityId,
+                    l.Nationality.Name,
+                    l.EyeColor.Id,
+                    l.EyeColor.Name,
+                    l.Height,
+                    l.Weight,
+                    l.BloodTypeId,
+                    l.BloodType.Name
+                ))
+                .FirstAsync();
+            
+            return Results.Created($"/api/licenses/{response.Id}", response);
         });
     }
 }

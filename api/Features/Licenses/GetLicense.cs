@@ -5,7 +5,7 @@ namespace MobileDataTerminal.Api.Features.Licenses;
 
 public static class GetLicense
 {
-    public record Response(
+    private record Response(
         int Id,
         string LicenseNumber,
         int TypeId,
@@ -30,45 +30,6 @@ public static class GetLicense
         int BloodTypeId,
         string BloodType
     );
-
-    public static async Task<Response> Handler(string licenseNumber, LicensesDbContext context)
-    {
-        var response = await context.Licenses
-            .Where(l => l.Number == licenseNumber)
-            .Select(l => new Response(
-                l.Id,
-                l.Number,
-                l.TypeId,
-                l.Type.Name,
-                l.StatusId,
-                l.Status.Name,
-                l.IssuanceDate,
-                l.ExpiryDate,
-                l.FirstName,
-                l.MiddleName,
-                l.LastName,
-                l.SexId,
-                l.Sex.Name,
-                l.DateOfBirth,
-                l.Address,
-                l.NationalityId,
-                l.Nationality.Name,
-                l.EyeColor.Id,
-                l.EyeColor.Name,
-                l.Height,
-                l.Weight,
-                l.BloodTypeId,
-                l.BloodType.Name
-            ))
-            .FirstOrDefaultAsync();
-
-        if (response is null)
-        {
-            throw new ResourceNotFoundException($"License {licenseNumber} not found.");
-        }
-
-        return response;
-    }
     
     public static void MapGetLicense(this IEndpointRouteBuilder app)
     {
@@ -76,8 +37,40 @@ public static class GetLicense
             string licenseNumber,
             LicensesDbContext context) =>
         {
-            var response = await Handler(licenseNumber, context);
+            var response = await context.Licenses
+                .Where(l => l.Number == licenseNumber)
+                .Select(l => new Response(
+                    l.Id,
+                    l.Number,
+                    l.TypeId,
+                    l.Type.Name,
+                    l.StatusId,
+                    l.Status.Name,
+                    l.IssuanceDate,
+                    l.ExpiryDate,
+                    l.FirstName,
+                    l.MiddleName,
+                    l.LastName,
+                    l.SexId,
+                    l.Sex.Name,
+                    l.DateOfBirth,
+                    l.Address,
+                    l.NationalityId,
+                    l.Nationality.Name,
+                    l.EyeColor.Id,
+                    l.EyeColor.Name,
+                    l.Height,
+                    l.Weight,
+                    l.BloodTypeId,
+                    l.BloodType.Name
+                ))
+                .FirstOrDefaultAsync();
 
+            if (response is null)
+            {
+                throw new ResourceNotFoundException($"License {licenseNumber} not found.");
+            }
+            
             return Results.Ok(response);
         });
     }
