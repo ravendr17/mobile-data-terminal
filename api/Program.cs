@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MobileDataTerminal.Api.Data;
 using MobileDataTerminal.Api.Exceptions;
@@ -21,6 +22,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+
+builder.Services.AddSingleton<PasswordHasher<User>>();
 
 var app = builder.Build();
 

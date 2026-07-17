@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MobileDataTerminal.Api.Data;
@@ -53,7 +54,8 @@ public static class CreateUser
         app.MapPost("api/users", async (
             CreateUserRequest req,
             IValidator<CreateUserRequest> validator,
-            AppDbContext context) =>
+            AppDbContext context,
+            PasswordHasher<User> hasher) =>
         {
             var validationResult = await validator.ValidateAsync(req);
 
@@ -82,10 +84,11 @@ public static class CreateUser
             {
                 Username = req.Username,
                 Email = req.Email,
-                Password = req.Password,
                 RoleId = req.RoleId,
                 LicenseId = licenseId
             };
+
+            user.Password = hasher.HashPassword(user, req.Password);
 
             try
             {
