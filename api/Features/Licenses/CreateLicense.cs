@@ -8,7 +8,7 @@ namespace MobileDataTerminal.Api.Features.Licenses;
 
 public static class CreateLicense
 {
-    public record Request(
+    public record CreateLicenseRequest(
         string LicenseNumber,
         int TypeId,
         int StatusId,
@@ -27,7 +27,7 @@ public static class CreateLicense
         int BloodTypeId
     );
     
-    private record Response(
+    private record CreateLicenseResponse(
         int Id,
         string LicenseNumber,
         int TypeId,
@@ -53,7 +53,7 @@ public static class CreateLicense
         string BloodType
     );
 
-    public class Validator : AbstractValidator<Request>
+    public class Validator : AbstractValidator<CreateLicenseRequest>
     {
         public Validator()
         {
@@ -101,8 +101,8 @@ public static class CreateLicense
     public static void MapCreateLicense(this IEndpointRouteBuilder app)
     {
         app.MapPost("/api/licenses", async (
-            Request req,
-            IValidator<Request> validator,
+            CreateLicenseRequest req,
+            IValidator<CreateLicenseRequest> validator,
             AppDbContext context) =>
         {
             var validationResult = await validator.ValidateAsync(req);
@@ -176,7 +176,7 @@ public static class CreateLicense
             
             var response = await context.Licenses
                 .Where(l => l.Id == license.Id)
-                .Select(l => new Response(
+                .Select(l => new CreateLicenseResponse(
                     l.Id,
                     l.Number,
                     l.TypeId,

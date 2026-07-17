@@ -6,7 +6,7 @@ namespace MobileDataTerminal.Api.Features.Licenses;
 
 public static class GetLicense
 {
-    private record Response(
+    private record GetLicenseResponse(
         int Id,
         string LicenseNumber,
         int TypeId,
@@ -40,7 +40,7 @@ public static class GetLicense
         {
             var response = await context.Licenses
                 .Where(l => l.Number == licenseNumber)
-                .Select(l => new Response(
+                .Select(l => new GetLicenseResponse(
                     l.Id,
                     l.Number,
                     l.TypeId,

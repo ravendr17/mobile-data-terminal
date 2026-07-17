@@ -8,7 +8,7 @@ namespace MobileDataTerminal.Api.Features.Users;
 
 public static class CreateUser
 {
-    public record Request(
+    public record CreateUserRequest(
         string Username,
         string Email,
         string Password,
@@ -16,7 +16,7 @@ public static class CreateUser
         string? LicenseNumber
     );
 
-    private record Response(
+    private record CreateUserResponse(
         int Id,
         string Username,
         string Email,
@@ -25,7 +25,7 @@ public static class CreateUser
         string? LicenseNumber
     );
 
-    public class Validator : AbstractValidator<Request>
+    public class Validator : AbstractValidator<CreateUserRequest>
     {
         public Validator()
         {
@@ -51,8 +51,8 @@ public static class CreateUser
     public static void MapCreateUser(this IEndpointRouteBuilder app)
     {
         app.MapPost("api/users", async (
-            Request req,
-            IValidator<Request> validator,
+            CreateUserRequest req,
+            IValidator<CreateUserRequest> validator,
             AppDbContext context) =>
         {
             var validationResult = await validator.ValidateAsync(req);
@@ -119,7 +119,7 @@ public static class CreateUser
 
             var response = await context.Users
                 .Where(u => u.Id == user.Id)
-                .Select(u => new Response(
+                .Select(u => new CreateUserResponse(
                     u.Id,
                     u.Username,
                     u.Email,
