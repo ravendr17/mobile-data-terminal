@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MobileDataTerminal.Api.Features.Licenses;
 using MobileDataTerminal.Api.Features.Users;
+using MobileDataTerminal.Api.Features.Vehicles;
 
 namespace MobileDataTerminal.Api.Data;
 public class AppDbContext(DbContextOptions<AppDbContext> options): DbContext(options)
@@ -15,6 +16,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options): DbContext(opt
     
     public DbSet<User> Users { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
+    
+    public DbSet<Vehicle> Vehicles { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -212,6 +215,33 @@ public class AppDbContext(DbContextOptions<AppDbContext> options): DbContext(opt
                 .WithOne()
                 .HasForeignKey<User>(e => e.LicenseId)
                 .HasConstraintName("fk_users_licenses");
+        });
+
+        modelBuilder.Entity<Vehicle>(e =>
+        {
+            e.Property(e => e.PlateNumber).HasMaxLength(30);
+            e.Property(e => e.MvFileNumber).HasMaxLength(30);
+            e.Property(e => e.Vin).HasMaxLength(30);
+            e.Property(e => e.Make).HasMaxLength(50);
+            e.Property(e => e.Model).HasMaxLength(50);
+            e.Property(e => e.Color).HasMaxLength(50);
+            
+            e.HasIndex(e => e.PlateNumber)
+                .IsUnique()
+                .HasDatabaseName("uq_vehicles_plate_number");
+
+            e.HasIndex(e => e.MvFileNumber)
+                .IsUnique()
+                .HasDatabaseName("uq_vehicles_mv_file_number");
+            
+            e.HasIndex(e => e.Vin)
+                .IsUnique()
+                .HasDatabaseName("uq_vehicles_vin");
+
+            e.HasOne(e => e.License)
+                .WithMany(l => l.Vehicles)
+                .HasForeignKey(e => e.LicenseId)
+                .HasConstraintName("fk_vehicles_licenses");
         });
     }
 }

@@ -1,3 +1,5 @@
+using MobileDataTerminal.Api.Features.Vehicles;
+
 namespace MobileDataTerminal.Api.Features.Licenses;
 
 public class License
@@ -26,6 +28,6 @@ public class License
     public int BloodTypeId { get; set; }
     public BloodType BloodType { get; set; } = null!;
 
-    // public List<Vehicle> Vehicles { get; set; } = new();
+    public List<Vehicle> Vehicles { get; set; } = new();
     // public List<Ticket> Tickets { get; set; } = new();
 }
