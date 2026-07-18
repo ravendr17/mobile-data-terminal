@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MobileDataTerminal.Api.Features.Licenses;
+using MobileDataTerminal.Api.Features.Ticketing;
 using MobileDataTerminal.Api.Features.Users;
 using MobileDataTerminal.Api.Features.Vehicles;
 
@@ -18,6 +19,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options): DbContext(opt
     public DbSet<UserRole> UserRoles { get; set; }
     
     public DbSet<Vehicle> Vehicles { get; set; }
+    
+    public DbSet<Violation> Violations { get; set; }
+    public DbSet<Ticket> Tickets { get; set; }
+    public DbSet<TicketStatus> TicketStatuses { get; set; }
+    public DbSet<TicketViolation> TicketViolations { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -243,5 +249,80 @@ public class AppDbContext(DbContextOptions<AppDbContext> options): DbContext(opt
                 .HasForeignKey(e => e.LicenseId)
                 .HasConstraintName("fk_vehicles_licenses");
         });
+        
+        modelBuilder.Entity<Violation>(entity =>
+        { 
+            entity.Property(v => v.Name).HasMaxLength(100);
+            
+            entity.HasIndex(v => v.Name).IsUnique()
+                .HasDatabaseName("uq_violations_name");
+
+            entity.HasData(
+                new Violation {Id = 1, Name = "DRIVING WITHOUT VALID LICENSE", IsTiered = false, InitialFine = 3000},
+                new Violation {Id = 2, Name = "FAILURE TO CARRY LICENSE", IsTiered = false, InitialFine = 1000},
+                new Violation {Id = 3, Name = "FAKE DRIVER'S LICENSE", IsTiered = false, InitialFine = 3000},
+                new Violation {Id = 4, Name = "DRIVING UNREGISTERED VEHICLE", IsTiered = false, InitialFine = 10000},
+                new Violation {Id = 5, Name = "ILLEGAL MODIFICATIONS", IsTiered = false, InitialFine = 5000},
+                new Violation {Id = 6, Name = "DEFECTIVE/IMPROPER EQUIPMENT", IsTiered = false, InitialFine = 5000},
+                new Violation {Id = 7, Name = "RECKLESS DRIVING", IsTiered = true, InitialFine = 2000, SecondFine = 3000, ThirdFine = 10000},
+                new Violation {Id = 8, Name = "NO SEATBELT", IsTiered = true, InitialFine = 1000, SecondFine = 3000, ThirdFine = 5000},
+                new Violation {Id = 9, Name = "NO HELMET", IsTiered = true, InitialFine = 1500, SecondFine = 3000, ThirdFine = 5000},
+                new Violation {Id = 10, Name = "DRIVING UNDER INFLUENCE", IsTiered = true, InitialFine = 20000, SecondFine = 50000, ThirdFine = 100000},
+                new Violation {Id = 11, Name = "OBSTRUCTION", IsTiered = false, InitialFine = 1000},
+                new Violation {Id = 12, Name = "NO OR/CR", IsTiered = false, InitialFine = 1000},
+                new Violation {Id = 13, Name = "OVERLOADING PASSENGERS", IsTiered = false, InitialFine = 2000},
+                new Violation {Id = 14, Name = "OVER-SPEEDING", IsTiered = false, InitialFine = 1000},
+                new Violation {Id = 15, Name = "BEATING THE RED LIGHT", IsTiered = false, InitialFine = 1000},
+                new Violation {Id = 16, Name = "ILLEGAL PARKING", IsTiered = false, InitialFine = 1000},
+                new Violation {Id = 17, Name = "USING PHONE WHILE DRIVING", IsTiered = false, InitialFine = 1000},
+                new Violation {Id = 18, Name = "COUNTERFLOWING", IsTiered = false, InitialFine = 2000}
+            );
+        });
+        
+        modelBuilder.Entity<TicketStatus>(e =>
+        {
+            e.Property(e => e.Name).HasMaxLength(50);
+            e.HasIndex(e => e.Name)
+                .IsUnique().HasDatabaseName("uq_ticket_statuses_name");
+
+            e.HasData(
+                new TicketStatus {Id = 1, Name = "Unsettled"},
+                new TicketStatus {Id = 2, Name = "Settled"}
+            );
+        });
+
+        modelBuilder.Entity<Ticket>(e =>
+        {
+            e.Property(e => e.ReferenceNumber).HasMaxLength(30);
+            e.Property(e => e.IncidentPlace).HasMaxLength(250);
+            e.Property(e => e.OfficerNotes).HasMaxLength(250);
+
+            e.HasIndex(e => e.ReferenceNumber)
+                .IsUnique().HasDatabaseName("uq_tickets_reference_number");
+
+            e.HasOne(e => e.License)
+                .WithMany()
+                .HasForeignKey(e => e.LicenseId)
+                .HasConstraintName("fk_tickets_licenses");
+
+            e.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("GETUTCDATE()");
+        });
+        
+        
+        modelBuilder.Entity<TicketViolation>(entity =>
+        {
+            entity.HasKey(tv => new { tv.TicketId, tv.ViolationId });
+            
+            entity.HasOne(tv => tv.Ticket)
+                .WithMany(t => t.TicketViolations)
+                .HasForeignKey(tv => tv.TicketId)
+                .HasConstraintName("fk_ticket_violations_tickets");
+
+            entity.HasOne(tv => tv.Violation)
+                .WithMany()
+                .HasForeignKey(tv => tv.ViolationId)
+                .HasConstraintName("fk_ticket_violations_violations");
+        });    
     }
 }
