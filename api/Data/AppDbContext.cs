@@ -250,14 +250,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> options): DbContext(opt
                 .HasConstraintName("fk_vehicles_licenses");
         });
         
-        modelBuilder.Entity<Violation>(entity =>
+        modelBuilder.Entity<Violation>(e =>
         { 
-            entity.Property(v => v.Name).HasMaxLength(100);
+            e.Property(e => e.Name).HasMaxLength(100);
             
-            entity.HasIndex(v => v.Name).IsUnique()
+            e.HasIndex(e => e.Name).IsUnique()
                 .HasDatabaseName("uq_violations_name");
 
-            entity.HasData(
+            e.HasData(
                 new Violation {Id = 1, Name = "DRIVING WITHOUT VALID LICENSE", IsTiered = false, InitialFine = 3000},
                 new Violation {Id = 2, Name = "FAILURE TO CARRY LICENSE", IsTiered = false, InitialFine = 1000},
                 new Violation {Id = 3, Name = "FAKE DRIVER'S LICENSE", IsTiered = false, InitialFine = 3000},
@@ -277,6 +277,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options): DbContext(opt
                 new Violation {Id = 17, Name = "USING PHONE WHILE DRIVING", IsTiered = false, InitialFine = 1000},
                 new Violation {Id = 18, Name = "COUNTERFLOWING", IsTiered = false, InitialFine = 2000}
             );
+
+            e.Property(e => e.InitialFine).HasPrecision(10, 2);
+            e.Property(e => e.SecondFine).HasPrecision(10, 2);
+            e.Property(e => e.ThirdFine).HasPrecision(10, 2);
         });
         
         modelBuilder.Entity<TicketStatus>(e =>
@@ -309,20 +313,21 @@ public class AppDbContext(DbContextOptions<AppDbContext> options): DbContext(opt
                 .HasDefaultValueSql("GETUTCDATE()");
         });
         
-        
-        modelBuilder.Entity<TicketViolation>(entity =>
+        modelBuilder.Entity<TicketViolation>(e =>
         {
-            entity.HasKey(tv => new { tv.TicketId, tv.ViolationId });
+            e.HasKey(e => new { e.TicketId, e.ViolationId });
             
-            entity.HasOne(tv => tv.Ticket)
+            e.HasOne(e => e.Ticket)
                 .WithMany(t => t.TicketViolations)
-                .HasForeignKey(tv => tv.TicketId)
+                .HasForeignKey(e => e.TicketId)
                 .HasConstraintName("fk_ticket_violations_tickets");
 
-            entity.HasOne(tv => tv.Violation)
+            e.HasOne(e => e.Violation)
                 .WithMany()
-                .HasForeignKey(tv => tv.ViolationId)
+                .HasForeignKey(e => e.ViolationId)
                 .HasConstraintName("fk_ticket_violations_violations");
+
+            e.Property(e => e.Fine).HasPrecision(10, 2);
         });    
     }
 }
