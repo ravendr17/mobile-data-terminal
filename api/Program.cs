@@ -1,6 +1,10 @@
+using System.Text;
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using MobileDataTerminal.Api.Authentication;
 using MobileDataTerminal.Api.Data;
 using MobileDataTerminal.Api.Exceptions;
 using MobileDataTerminal.Api.Features.Licenses;
@@ -25,6 +29,23 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddSingleton<PasswordHasher<User>>();
+builder.Services.AddSingleton<TokenProvider>();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(o =>
+    {
+        o.TokenValidationParameters = new TokenValidationParameters
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]!)
+            ),
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ClockSkew = TimeSpan.Zero,
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -42,6 +63,9 @@ app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapCreateLicense();
 app.MapGetLicense();
 app.MapDeleteLicense();
@@ -51,5 +75,6 @@ app.MapDeleteUser();
 app.MapCreateVehicle();
 app.MapGetVehicle();
 app.MapDeleteVehicle();
+app.MapLoginUser();
 
 app.Run();
