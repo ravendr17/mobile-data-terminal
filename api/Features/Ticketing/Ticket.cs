@@ -1,3 +1,5 @@
+using MobileDataTerminal.Api.Features.Licenses;
+
 namespace MobileDataTerminal.Api.Features.Ticketing;
 
 public class Ticket
@@ -13,4 +15,5 @@ public class Ticket
     public string IncidentPlace { get; set; } = string.Empty;
     public string? OfficerNotes { get; set; }
     public List<TicketViolation> TicketViolations { get; set; } = new();
+    public License License { get; set; } = null!;
 }
