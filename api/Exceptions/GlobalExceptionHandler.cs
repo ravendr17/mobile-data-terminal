@@ -23,6 +23,8 @@ public sealed class GlobalExceptionHandler(
                 (StatusCodes.Status409Conflict, exception.Message),
             ResourceNotFoundException => 
                 (StatusCodes.Status404NotFound, exception.Message),
+            UnauthorizedException => 
+                (StatusCodes.Status401Unauthorized, exception.Message),
             BadHttpRequestException => 
                 (StatusCodes.Status400BadRequest, "Invalid/malformed request body."),
             _ => (StatusCodes.Status500InternalServerError, "An unexpected server error occured.")
