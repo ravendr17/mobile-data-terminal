@@ -1,4 +1,3 @@
 <Solution>
-  <Project Path="backend/Backend.csproj" />
   <Project Path="api/MobileDataTerminal.Api.csproj" />
 </Solution>
