@@ -1,7 +1,8 @@
-function App() {
+import LoginPage from "./features/auth/login-page";
 
+function App() {
   return (
-    <div className="font-bold underline">Hi</div>
+    <LoginPage></LoginPage>
   )
 }
 
