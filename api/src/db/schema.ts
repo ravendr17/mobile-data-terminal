@@ -7,21 +7,13 @@ import { eyeColors } from "../constants/eye-colors.js";
 import { bloodTypes } from "../constants/blood-types.js";
 import { ticketStatuses } from "../constants/ticket-statuses.js";
 
-const userRoleEnum = pgEnum("user_role", userRoles);
-const licenseTypeEnum = pgEnum("license_type", licenseTypes);
-const licenseStatusEnum = pgEnum("license_status", licenseStatuses);
-const sexEnum = pgEnum("sex", sexes);
-const eyeColorEnum = pgEnum("eye_color", eyeColors);
-const bloodTypeEnum = pgEnum("blood_type", bloodTypes);
-const ticketStatusEnum = pgEnum("ticket_status", ticketStatuses);
-
-export const users = snakeCase.table("users", {
-  id: integer().generatedAlwaysAsIdentity().primaryKey(),
-  email: text().notNull().unique(),
-  password: text().notNull(),
-  role: userRoleEnum().notNull(),
-  licenseId: integer().unique().references(() => licenses.id, {onDelete: "set null"})
-});
+export const userRoleEnum = pgEnum("user_role", userRoles);
+export const licenseTypeEnum = pgEnum("license_type", licenseTypes);
+export const licenseStatusEnum = pgEnum("license_status", licenseStatuses);
+export const sexEnum = pgEnum("sex", sexes);
+export const eyeColorEnum = pgEnum("eye_color", eyeColors);
+export const bloodTypeEnum = pgEnum("blood_type", bloodTypes);
+export const ticketStatusEnum = pgEnum("ticket_status", ticketStatuses);
 
 export const licenses = snakeCase.table("licenses", {
   id: integer().generatedAlwaysAsIdentity().primaryKey(),
@@ -40,6 +32,14 @@ export const licenses = snakeCase.table("licenses", {
   height: integer().notNull(),
   weight: integer().notNull(),
   bloodType: bloodTypeEnum().notNull()
+});
+
+export const users = snakeCase.table("users", {
+  id: integer().generatedAlwaysAsIdentity().primaryKey(),
+  email: text().notNull().unique(),
+  password: text().notNull(),
+  role: userRoleEnum().notNull(),
+  licenseId: integer().unique().references(() => licenses.id, {onDelete: "set null"})
 });
 
 export const vehicles = snakeCase.table("vehicles", {
