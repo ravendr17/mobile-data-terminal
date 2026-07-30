@@ -1,8 +1,8 @@
 export const eyeColors = [
-  "brown",
-  "blue",
-  "green",
-  "hazel",
-  "gray",
-  "amber"
+  "Brown",
+  "Blue",
+  "Green",
+  "Hazel",
+  "Gray",
+  "Amber"
 ] as const;

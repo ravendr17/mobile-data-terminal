@@ -1,4 +1,4 @@
 export const sexes = [
-  "male",
-  "female"
+  "Male",
+  "Female"
 ] as const;
